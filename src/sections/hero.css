@@ -1,0 +1,127 @@
+/* ── Hero Section ──────────────────────────────────────── */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.hero-greeting {
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.hero-name {
+  font-size: clamp(2rem, 5.5vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.1; /* slightly more room for wrap */
+  padding-bottom: 0.1em;
+  margin: 0;
+  white-space: normal; /* Allow wrapping on small screens */
+  word-break: keep-all; /* Keep words intact when wrapping */
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.typing-cursor {
+  display: inline-block;
+  color: var(--accent);
+  margin-left: 2px;
+  -webkit-text-fill-color: var(--accent);
+  /* Override the text gradient for the cursor */
+  animation: blink 1s step-end infinite;
+}
+
+.cursor-done {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.hero-tagline {
+  font-size: 1.1rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 3rem;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: scrollPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleY(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}

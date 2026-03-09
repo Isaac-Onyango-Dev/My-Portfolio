@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Personal portfolio — designer, developer, creator." />
+    <title>Portfolio | Isaac Onyango Ouma</title>
+
+    <!-- Google Fonts: Inter for body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome for Icons -->
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Premium Interactive Background -->
+    <div class="background-effects">
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+      <div class="glow glow-3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+      <div class="nav-inner">
+        <!-- Brand/Logo (Optional left align, we can just push right if empty) -->
+        <div class="nav-brand">
+          <a href="#" class="font-bold tracking-widest text-[#6366f1]">IOO.</a>
+        </div>
+        
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#manifestoes" class="nav-link">Manifesto</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main content — sections are injected here by main.js -->
+    <main id="app"></main>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <p>© 2026 Isaac Onyango Ouma · Built with Vite + TailwindCSS</p>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

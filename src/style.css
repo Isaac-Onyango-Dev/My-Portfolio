@@ -1,0 +1,285 @@
+/* ── Tailwind Directives ────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design Tokens ─────────────────────────────────────── */
+/* Default = Dark Mode */
+:root {
+  --accent:        #6366f1;
+  --accent-hover:  #4f46e5;
+  --bg:            #121212;
+  --bg-alt:        #1a1a2e;
+  --card-bg:       #1e1e2f;
+  --border:        rgba(255,255,255,0.1);
+  --text-primary:  #e0e0e0;
+  --text-secondary:#94a3b8;
+  --muted:         #64748b;
+  --font-family:   'Inter', system-ui, sans-serif;
+  --glow-1: rgba(99, 102, 241, 0.12);
+  --glow-2: rgba(236, 72, 153, 0.10);
+  --glow-3: rgba(45, 212, 191, 0.10);
+  --grid-color: rgba(255, 255, 255, 0.025);
+}
+
+
+/* ── Premium Background Effects ─────────────────────────── */
+.background-effects {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  animation: floatOrb 20s infinite ease-in-out alternate;
+  transform: translateZ(0); /* Hardware acceleration */
+}
+
+/* Dark mode needs higher blur for smooth blends across large dark spaces */
+@media (min-width: 768px) {
+  .glow { filter: blur(140px); }
+}
+
+.glow-1 {
+  width: 50vw; height: 50vh;
+  top: -10vh; left: -10vw;
+  background: var(--glow-1);
+  animation-duration: 25s;
+}
+
+.glow-2 {
+  width: 60vw; height: 60vh;
+  bottom: -20vh; right: -10vw;
+  background: var(--glow-2);
+  animation-duration: 22s;
+  animation-direction: alternate-reverse;
+}
+
+.glow-3 {
+  width: 40vw; height: 40vh;
+  top: 40vh; left: 30vw;
+  background: var(--glow-3);
+  animation-duration: 28s;
+  animation-delay: -5s;
+}
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  z-index: 1;
+}
+
+@keyframes floatOrb {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(5%, 10%) scale(1.1); }
+  100% { transform: translate(-5%, 5%) scale(0.95); }
+}
+
+/* ── Base ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ── Shared Section Layout ──────────────────────────────── */
+.section-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 1rem;
+  line-height: 1.15;
+}
+
+/* ── Shared Buttons ─────────────────────────────────────── */
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  border-radius: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* ── Navbar ─────────────────────────────────────────────── */
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg); /* Use theme variable */
+  opacity: 0.95;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Push brand and hamburger apart on mobile */
+}
+
+/* ── Mobile Hamburger Toggle ────────────────────────────── */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 101;
+  transition: color 0.2s;
+}
+
+.nav-toggle:hover {
+  color: var(--accent);
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 2.5rem;
+}
+
+.nav-links a {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  padding: 0.5rem; /* Better touch target */
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+}
+
+/* ── Mobile Nav Queries ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block; /* Show hamburger on small screens */
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 64px; /* Default navbar height */
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    gap: 0;
+    /* Hide off-screen by default */
+    transform: translateY(-150%);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+    z-index: 99;
+  }
+
+  .nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 1.5rem 0;
+    font-size: 1.1rem;
+  }
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+#footer {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
