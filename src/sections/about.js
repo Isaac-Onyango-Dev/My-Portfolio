@@ -47,7 +47,7 @@ export function About() {
               <div class="tech-icon" style="--i: 14; color: #8B5CF6;"><i class="fa-solid fa-brain"></i></div> <!-- AI/ML -->
               <div class="tech-icon" style="--i: 15; color: #D83B01;"><i class="fa-brands fa-microsoft"></i></div> <!-- MS Office -->
             </div>
-            <img class="about-image" src="/isaac-profile.png" alt="Isaac Onyango Ouma" />
+            <img class="about-image" src="${import.meta.env.BASE_URL}isaac-profile.png" alt="Isaac Onyango Ouma" />
           </div>
         </div>
       </div>
