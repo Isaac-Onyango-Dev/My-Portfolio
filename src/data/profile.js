@@ -4,7 +4,8 @@
  * whole portfolio updates. No other file should contain your bio, links,
  * job history or project details.
  *
- * Anything marked  // TODO  is a placeholder you should replace.
+ * Content below is taken from your CV. Anything still marked // TODO is a
+ * detail the CV did not specify.
  * ───────────────────────────────────────────────────────────────────────
  */
 
@@ -12,59 +13,55 @@ export const profile = {
   // ── Identity ──────────────────────────────────────────────────────────
   name: 'Isaac Onyango Ouma',
   initials: 'IOO.',
-  // Shown under your name in the hero. Keep it concrete — recruiters scan this.
   roles: [
-    'Full-Stack Developer',
-    'Backend & API Builder',
-    'Automation Engineer',
-    'UI/UX-Minded Coder',
+    'Computer Science Student',
+    'Software Developer',
+    'Full-Stack Builder',
+    'AI & Automation Enthusiast',
   ],
-  // One sentence. What you do, who for, and what you are looking for.
   tagline:
-    'I build clean, reliable web applications — from database schema to the pixels on screen.',
-  location: 'Nairobi, Kenya', // TODO confirm
-  // Set to false once you are hired; hides the "open to work" badge.
+    'I build practical software that solves real problems — desktop apps, web platforms, databases and the automation that ties them together.',
+  location: 'Kenya',
   openToWork: true,
   availability: 'Open to junior developer roles & internships',
 
   // ── Contact ───────────────────────────────────────────────────────────
-  email: 'isaaco62800@gmail.com', // TODO confirm this is the address you want public
-  // Put your CV in /public and name it here. Leave '' to hide the button.
-  resumeFile: 'isaac-onyango-cv.pdf', // TODO add this file to /public
+  email: 'isaaco62800@gmail.com',
+  phone: '', // TODO add if you want it public
+  // Sits in /public. Leave '' to hide the download button.
+  resumeFile: 'Isaac-Onyango-Ouma-CV.pdf',
 
   // ── Links ─────────────────────────────────────────────────────────────
   github: 'Isaac-Onyango-Dev',
   socials: [
-    { label: 'GitHub',   icon: 'fa-brands fa-github',     url: 'https://github.com/Isaac-Onyango-Dev' },
-    { label: 'LinkedIn', icon: 'fa-brands fa-linkedin',   url: 'https://www.linkedin.com/in/isaac-onyango-334953374/' },
-    { label: 'X',        icon: 'fa-brands fa-x-twitter',  url: 'https://x.com/isaaco62800' },
+    { label: 'GitHub',   icon: 'fa-brands fa-github',    url: 'https://github.com/Isaac-Onyango-Dev' },
+    { label: 'LinkedIn', icon: 'fa-brands fa-linkedin',  url: 'https://www.linkedin.com/in/isaac-onyango-334953374/' },
+    { label: 'X',        icon: 'fa-brands fa-x-twitter', url: 'https://x.com/isaaco62800' },
   ],
 
   // ── Site / SEO ────────────────────────────────────────────────────────
   siteUrl: 'https://isaac-onyango-dev.github.io/My-Portfolio/',
-  ogImage: 'isaac-profile.png', // lives in /public
+  ogImage: 'isaac-profile.png',
 
   // ── Contact form ──────────────────────────────────────────────────────
-  // Free, no backend, works on GitHub Pages. Sign up at https://web3forms.com
-  // with your email, paste the access key below, and the form goes live.
-  // Until a real key is present the form falls back to opening the visitor's
-  // email client instead of silently failing.
-  web3formsKey: '', // TODO paste your Web3Forms access key
+  // Formspree endpoint. Messages land in the inbox tied to this form.
+  formEndpoint: 'https://formspree.io/f/mzdznlge',
 };
 
 // ── About copy ──────────────────────────────────────────────────────────
-// Two or three short paragraphs. Write like you talk. TODO: make this yours.
 export const aboutParagraphs = [
-  `I'm a developer based in ${profile.location} who enjoys the whole stack — designing
-   the data model, writing the API, then making the interface feel effortless. Most of
-   what I know came from building things end to end and breaking them until they worked.`,
+  `I'm a Computer Science student at Moi University and a software developer who
+   learns by building. Desktop applications, web platforms, database systems,
+   developer tools — if it solves a real problem, I want to build it and ship it.`,
 
-  `I care about the unglamorous parts: readable code, sensible database design, and
-   automating anything I've had to do more than twice. I'd rather ship something small
-   that works properly than something large that almost does.`,
+  `My work spans the whole stack: React and TypeScript on the front, Python and
+   SQL behind it, Docker and GitHub Actions to get it out the door. I care about
+   the parts nobody demos — sensible schema design, honest error handling, and
+   packaging that actually works on someone else's machine.`,
 
-  `Right now I'm looking for a junior developer role or internship where I can learn from
-   people who've shipped at scale, and contribute from day one.`,
+  `Alongside that I'm exploring AI integration, cybersecurity and cloud
+   infrastructure. I'm looking for a junior developer role or internship where I
+   can learn from people who ship at scale and contribute from day one.`,
 ];
 
 // ── Skills, grouped ─────────────────────────────────────────────────────
@@ -72,132 +69,196 @@ export const skillGroups = [
   {
     group: 'Languages',
     items: [
-      { name: 'JavaScript', icon: 'fa-brands fa-js',        color: '#F7DF1E' },
-      { name: 'Python',     icon: 'fa-brands fa-python',    color: '#3776AB' },
-      { name: 'Java',       icon: 'fa-brands fa-java',      color: '#ED8B00' },
-      { name: 'SQL',        icon: 'fa-solid fa-database',   color: '#336791' },
-      { name: 'HTML5',      icon: 'fa-brands fa-html5',     color: '#E34F26' },
-      { name: 'CSS3',       icon: 'fa-brands fa-css3-alt',  color: '#1572B6' },
+      { name: 'JavaScript', icon: 'fa-brands fa-js',       color: '#F7DF1E' },
+      { name: 'TypeScript', icon: 'fa-solid fa-file-code', color: '#3178C6' },
+      { name: 'Python',     icon: 'fa-brands fa-python',   color: '#3776AB' },
+      { name: 'Java',       icon: 'fa-brands fa-java',     color: '#ED8B00' },
+      { name: 'C#',         icon: 'fa-solid fa-hashtag',   color: '#9B4F96' },
+      { name: 'HTML5',      icon: 'fa-brands fa-html5',    color: '#E34F26' },
+      { name: 'CSS3',       icon: 'fa-brands fa-css3-alt', color: '#1572B6' },
     ],
   },
   {
     group: 'Frameworks & Tools',
     items: [
-      { name: 'Node.js',     icon: 'fa-brands fa-node',        color: '#5FA04E' },
-      { name: 'Express',     icon: 'fa-solid fa-route',        color: '#94a3b8' },
-      { name: 'Spring Boot', icon: 'fa-solid fa-seedling',     color: '#6DB33F' },
-      { name: 'TailwindCSS', icon: 'fa-solid fa-wind',         color: '#06B6D4' },
-      { name: 'Vite',        icon: 'fa-solid fa-bolt',         color: '#A855F7' },
-      { name: 'Git',         icon: 'fa-brands fa-git-alt',     color: '#F05032' },
+      { name: 'React',          icon: 'fa-brands fa-react',    color: '#61DAFB' },
+      { name: 'Vite',           icon: 'fa-solid fa-bolt',      color: '#A855F7' },
+      { name: 'TailwindCSS',    icon: 'fa-solid fa-wind',      color: '#06B6D4' },
+      { name: 'Git',            icon: 'fa-brands fa-git-alt',  color: '#F05032' },
+      { name: 'GitHub Actions', icon: 'fa-solid fa-gears',     color: '#2088FF' },
+      { name: 'Docker',         icon: 'fa-brands fa-docker',   color: '#2496ED' },
+      { name: 'FFmpeg',         icon: 'fa-solid fa-film',      color: '#388E3C' },
     ],
   },
   {
-    group: 'Data & Infrastructure',
+    group: 'Data & Platforms',
     items: [
-      { name: 'PostgreSQL', icon: 'fa-solid fa-database',      color: '#336791' },
-      { name: 'MySQL',      icon: 'fa-solid fa-server',        color: '#4479A1' },
-      { name: 'MongoDB',    icon: 'fa-solid fa-leaf',          color: '#47A248' },
-      { name: 'Docker',     icon: 'fa-brands fa-docker',       color: '#2496ED' },
-      { name: 'n8n',        icon: 'fa-solid fa-network-wired', color: '#EA4B71' },
-      { name: 'AI / LLM APIs', icon: 'fa-solid fa-brain',      color: '#8B5CF6' },
+      { name: 'SQL Server',   icon: 'fa-solid fa-server',        color: '#CC2927' },
+      { name: 'PostgreSQL',   icon: 'fa-solid fa-database',      color: '#336791' },
+      { name: 'MongoDB',      icon: 'fa-solid fa-leaf',          color: '#47A248' },
+      { name: 'MS Access',    icon: 'fa-solid fa-table',         color: '#A4373A' },
+      { name: 'REST APIs',    icon: 'fa-solid fa-plug',          color: '#8B5CF6' },
+      { name: 'Linux/Ubuntu', icon: 'fa-brands fa-linux',        color: '#E95420' },
+      { name: 'AI Tooling',   icon: 'fa-solid fa-brain',         color: '#EC4899' },
     ],
   },
 ];
 
 // ── Featured projects ───────────────────────────────────────────────────
-// These sit above the auto-pulled GitHub repos. Three or four is plenty.
-// `repo` links the card to a GitHub repository; `demo` to a live deployment.
-// `image` is a file in /public, or a full URL, or null for a generated gradient.
+// These sit above the auto-pulled GitHub repos.
+// `image` is a file in /public, a full URL, or null for a generated gradient.
 export const featuredProjects = [
   {
-    title: 'Library Management System',
+    title: 'Internet Download Hub',
     blurb:
-      'Full-stack system for borrowing, returning and tracking book inventory, with role-based access for staff and members.',
+      'A free Windows desktop application for downloading video and audio from across the web, built around a clean, fast interface.',
     highlights: [
-      'Normalised MySQL schema with transactional borrow/return',
-      'REST API secured with Spring Security',
-      'Overdue detection and reporting',
+      'Desktop app packaged and released for Windows',
+      'Media pipeline handling multiple sources and formats',
+      'Automated builds and releases via GitHub Actions',
     ],
-    tags: ['Java', 'Spring Boot', 'MySQL', 'REST'],
-    repo: '', // TODO paste repo URL
-    demo: '',
+    tags: ['TypeScript', 'Desktop', 'Electron', 'CI/CD'],
+    repo: 'https://github.com/Isaac-Onyango-Dev/Internet-Download-Hub',
+    demo: 'https://isaac-onyango-dev.github.io/Internet-Download-Hub/',
     image: null,
-    status: 'in-progress', // 'live' | 'in-progress' | 'archived'
+    status: 'live',
   },
   {
-    title: 'Employee Portal',
+    title: 'MediaGrab',
     blurb:
-      'Secure authentication portal with JWT sessions, password hashing and protected routes for internal staff tooling.',
+      'Cross-platform media downloader for Windows, Linux and macOS, with a modern GUI, playlist support and full control over every download.',
     highlights: [
-      'JWT access + refresh token flow',
-      'bcrypt password hashing, rate-limited login',
-      'Role-gated dashboard routes',
+      'CustomTkinter interface with download history and playlist selection',
+      'Pause, resume, cancel, retry and delete on any download',
+      'Automatic FFmpeg detection with cross-platform packaging',
+      'Release pipeline automated with GitHub Actions',
     ],
-    tags: ['Node.js', 'Express', 'JWT', 'PostgreSQL'],
-    repo: '', // TODO
+    tags: ['Python', 'CustomTkinter', 'FFmpeg', 'GitHub Actions'],
+    repo: 'https://github.com/Isaac-Onyango-Dev/MediaGrab',
+    demo: 'https://isaac-onyango-dev.github.io/MediaGrab/',
+    image: null,
+    status: 'live',
+  },
+  {
+    title: 'ScamShield',
+    blurb:
+      'A tool that helps people detect and report suspicious online job and service listings before they lose money to them.',
+    highlights: [
+      'Listing analysis surfacing common scam signals',
+      'Community reporting flow for flagged listings',
+      'Responsive TypeScript front end',
+    ],
+    tags: ['TypeScript', 'Web App', 'Security'],
+    repo: 'https://github.com/Isaac-Onyango-Dev/ScamShield',
+    demo: 'https://isaac-onyango-dev.github.io/ScamShield/',
+    image: null,
+    status: 'live',
+  },
+  {
+    title: 'Streamer Hub',
+    blurb:
+      'A streaming platform in the spirit of modern services: cinematic hero sections, content sliders, search and episode organisation over live APIs.',
+    highlights: [
+      'API-driven content retrieval with pagination',
+      'Trending and completed sections with search',
+      'Worked around real provider and API limitations',
+      'Responsive UI across phone, tablet and desktop',
+    ],
+    tags: ['TypeScript', 'REST APIs', 'UI/UX'],
+    repo: 'https://github.com/Isaac-Onyango-Dev/Streamer-Hub',
+    demo: 'https://isaac-onyango-dev.github.io/Streamer-Hub/',
+    image: null,
+    status: 'live',
+  },
+  {
+    title: 'Complex Developers',
+    blurb:
+      'The brand and website for a software development studio offering web, software, game, AI and cybersecurity work.',
+    highlights: [
+      'Brand identity and service positioning',
+      'Marketing site deployed on Vercel',
+      'SEO groundwork and conversion-focused layout',
+    ],
+    tags: ['Web Design', 'Branding', 'Vercel'],
+    repo: 'https://github.com/Isaac-Onyango-Dev/Complex-Developers-Web',
+    demo: 'https://complex-developers-web.vercel.app/',
+    image: null,
+    status: 'live',
+  },
+  {
+    title: 'School Portal System',
+    blurb:
+      'A full college management portal designed around real institutional workflows, centralising student records, results, fees and communication.',
+    highlights: [
+      'Relational schema covering students, results, fees and hostels',
+      'CAT and examination results with assignment submission',
+      'Fee payment, hostel booking and exam registration flows',
+      'Designed for scalability and clear data organisation',
+    ],
+    tags: ['Database Design', 'SQL', 'Full-Stack'],
+    repo: '', // TODO add once the code is on GitHub
     demo: '',
     image: null,
     status: 'in-progress',
   },
-  {
-    title: 'Weather Dashboard',
-    blurb:
-      'Real-time forecast app built on the OpenWeather API, with geolocation, unit switching and backgrounds that react to conditions.',
-    highlights: [
-      'Async data fetching with graceful error states',
-      'Debounced city search with caching',
-      'Responsive CSS Grid layout',
-    ],
-    tags: ['JavaScript', 'Fetch API', 'CSS Grid'],
-    repo: '', // TODO
-    demo: '',
-    image: null,
-    status: 'live',
-  },
 ];
 
 // Repositories to never show in the auto-pulled GitHub list.
+// The profile README repo and this portfolio itself are noise on a portfolio.
 export const repoBlocklist = ['My-Portfolio', 'Isaac-Onyango-Dev'];
 
 // ── Experience & education timeline ─────────────────────────────────────
 // Newest first. `kind` picks the icon: 'work' | 'education' | 'certification'.
-// TODO: replace all of these with your real history.
 export const timeline = [
   {
     kind: 'work',
-    role: 'Freelance Developer',
-    org: 'Self-employed',
-    period: '2025 — Present',
+    role: 'Developer',
+    org: 'Complex Developers',
+    period: 'Present', // TODO add the year you started
     location: 'Remote',
     points: [
-      'Built and deployed web applications for small businesses, handling requirements, build and hosting end to end.',
-      'Automated repetitive client workflows with scripted pipelines, cutting manual data entry.',
+      'Building the brand and web presence for a software studio offering web, software, game and AI development.',
+      'Shipping client-facing sites with SEO groundwork and cloud deployment.',
+      'Covering API integration, automation and maintenance across projects.',
     ],
-    tags: ['JavaScript', 'Node.js', 'PostgreSQL'],
+    tags: ['Web Development', 'AI Integration', 'Cloud'],
   },
   {
-    kind: 'education',
-    role: 'BSc, Computer Science', // TODO your real course
-    org: 'University', // TODO
-    period: '2022 — 2026',
-    location: profile.location,
-    points: [
-      'Coursework in data structures, database systems, software engineering and networks.',
-      'Capstone project: full-stack management system with relational backend.',
-    ],
-    tags: ['Algorithms', 'Databases', 'Software Engineering'],
-  },
-  {
-    kind: 'certification',
-    role: 'Self-directed Engineering Practice',
-    org: 'Personal projects & open source',
+    kind: 'work',
+    role: 'Independent Software Developer',
+    org: 'Personal & open-source projects',
     period: 'Ongoing',
     location: 'Remote',
     points: [
-      'Shipping projects publicly on GitHub, from first commit through deployment.',
-      'Working through backend, DevOps and AI tooling one project at a time.',
+      'Shipping desktop and web applications end to end, from first commit through packaged release.',
+      'Automating build and release pipelines with GitHub Actions and Docker.',
+      'Debugging cross-platform packaging, environment configuration and third-party API limitations.',
     ],
-    tags: ['Docker', 'Git', 'CI/CD'],
+    tags: ['Python', 'TypeScript', 'CI/CD', 'Docker'],
+  },
+  {
+    kind: 'education',
+    role: 'BSc, Computer Science',
+    org: 'Moi University',
+    period: 'In progress', // TODO add your start and expected finish years
+    location: 'Kenya',
+    points: [
+      'Coursework in programming, database systems, computer networks and operating systems.',
+      'Further study in software development, web technologies, computer architecture and systems analysis.',
+    ],
+    tags: ['Databases', 'Networks', 'Operating Systems', 'Systems Analysis'],
+  },
+  {
+    kind: 'certification',
+    role: 'Professional Certificates',
+    org: 'Operating Systems · Networking · Graphics Design · Office Applications',
+    period: 'Completed',
+    location: 'Kenya',
+    points: [
+      'Certificate in Operating Systems and Certificate in Computer Networking.',
+      'Certificate in Graphics Design and Certificate in Computer/Office Applications.',
+    ],
+    tags: ['Operating Systems', 'Networking', 'Design'],
   },
 ];
 
@@ -205,22 +266,22 @@ export const timeline = [
 export const manifestoItems = [
   {
     number: '01',
-    title: 'Architecture precedes code',
-    body: "Robust systems aren't accidentally typed into existence; they are meticulously planned. I prioritise a strong foundational design before writing a single line of logic.",
+    title: 'Build things people can actually use',
+    body: 'A project is not finished when the code runs on my machine. It is finished when someone else can install it, open it, and get what they came for without reading a manual.',
   },
   {
     number: '02',
-    title: 'Design is how it works',
-    body: 'Aesthetics and mechanics are inseparable. I obsess over micro-interactions, accessibility and performance just as much as the visual layer.',
+    title: 'Architecture precedes code',
+    body: "Robust systems aren't accidentally typed into existence. I map the data and the workflows first, because a schema you get wrong follows you for the life of the project.",
   },
   {
     number: '03',
     title: 'Automation over repetition',
-    body: "If a process requires doing the same thing thrice, I script it. Efficiency isn't just about saving time; it's about eliminating human error.",
+    body: 'If a process needs doing three times, I script it. Automated builds and releases are not a luxury — they are how you stop shipping broken versions by hand.',
   },
   {
     number: '04',
     title: 'Continuous evolution',
-    body: "Technology shifts rapidly. The most critical skill I possess isn't mastery of a single framework — it's the ability to absorb, adapt and deploy new paradigms continuously.",
+    body: "The most useful skill I have isn't mastery of one framework — it's absorbing a new one fast enough to be useful in it by the end of the week.",
   },
 ];

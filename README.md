@@ -15,30 +15,28 @@ whole site updates — no other file contains your personal information.
 
 Anything still marked `// TODO` in that file is a placeholder waiting for you.
 
-### The short checklist
+The content is already filled in from your CV. What's left:
 
-1. **Bio** — rewrite `aboutParagraphs` in your own voice.
-2. **Timeline** — replace the three entries in `timeline` with your real jobs,
-   course and certifications.
-3. **Featured projects** — fill in the `repo` and `demo` URLs in `featuredProjects`,
-   and drop screenshots into `public/` (then set `image: 'my-shot.png'`).
-4. **CV** — put your PDF in `public/` and match the filename to `profile.resumeFile`.
-   Leave `resumeFile: ''` to hide the download button.
-5. **Contact form** — see below.
-6. **Open to work** — set `profile.openToWork` to `false` once you land the role.
+1. **Dates** — `timeline` needs your degree start and expected finish years, and the
+   year you started with Complex Developers.
+2. **Screenshots** — drop images into `public/` and set `image: 'my-shot.png'` on the
+   matching entry in `featuredProjects`. They currently fall back to generated
+   gradients.
+3. **School Portal System** — add its `repo` URL once the code is on GitHub.
+4. **CV** — `public/Isaac-Onyango-Ouma-CV.pdf` is generated from your Word document.
+   Regenerate it whenever you update the .docx.
+5. **Open to work** — set `profile.openToWork` to `false` once you land the role.
 
-## Wiring up the contact form
+## Contact form
 
-The form works with [Web3Forms](https://web3forms.com): free, no backend, no account
-data stored, and it works on GitHub Pages.
+The form posts to [Formspree](https://formspree.io), set in `profile.formEndpoint`.
+Messages arrive in the inbox attached to that form — no backend needed, and it works
+on GitHub Pages.
 
-1. Go to web3forms.com and enter your email — they send you an access key.
-2. Paste that key into `profile.web3formsKey` in `src/data/profile.js`.
-3. Push. Messages now land in your inbox.
-
-Until a key is set, the form validates as normal and then falls back to opening the
-visitor's email client, so it is never a dead end. A hidden honeypot field catches
-most spam bots.
+Formspree asks you to confirm the first submission by email, so send yourself one test
+message after deploying. If you ever clear `formEndpoint`, the form falls back to
+opening the visitor's email client, so it is never a dead end. A hidden honeypot field
+catches most spam bots.
 
 ## Projects pull from GitHub automatically
 

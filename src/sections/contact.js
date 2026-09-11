@@ -150,9 +150,9 @@ export function initContactForm() {
 
     const data = Object.fromEntries(new FormData(form).entries());
 
-    // No form service configured yet — fall back to the visitor's mail client
-    // so the form is never a dead end.
-    if (!profile.web3formsKey) {
+    // No endpoint configured — fall back to the visitor's mail client so the
+    // form is never a dead end.
+    if (!profile.formEndpoint) {
       const subject = encodeURIComponent(data.subject || `Portfolio message from ${data.name}`);
       const body = encodeURIComponent(`${data.message}\n\n— ${data.name} (${data.email})`);
       window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
@@ -165,25 +165,30 @@ export function initContactForm() {
     setStatus('Sending…', 'info');
 
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
+      const res = await fetch(profile.formEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          access_key: profile.web3formsKey,
-          subject: data.subject || `Portfolio message from ${data.name}`,
-          from_name: data.name,
-          ...data,
+          name: data.name,
+          email: data.email,
+          message: data.message,
+          // Formspree reads these underscore keys to set the email subject
+          // and the address a reply goes to.
+          _subject: data.subject || `Portfolio message from ${data.name}`,
+          _replyto: data.email,
         }),
       });
 
-      const result = await res.json();
-
-      if (res.ok && result.success) {
+      if (res.ok) {
         form.reset();
         if (counter) counter.textContent = '0 characters';
         setStatus("Thanks! Your message is on its way. I'll reply soon.", 'success');
       } else {
-        throw new Error(result.message || 'The form service rejected the request.');
+        const result = await res.json().catch(() => ({}));
+        const detail = Array.isArray(result.errors)
+          ? result.errors.map((e) => e.message).join(', ')
+          : result.error;
+        throw new Error(detail || `the form service returned ${res.status}.`);
       }
     } catch (err) {
       setStatus(
