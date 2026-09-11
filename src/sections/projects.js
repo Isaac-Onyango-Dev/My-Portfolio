@@ -1,157 +1,282 @@
 import './projects.css';
+import { profile, featuredProjects, repoBlocklist } from '../data/profile.js';
+import { fetchRepos, languageColors, relativeTime } from '../utils/github.js';
+import { revealWithin } from '../utils/motion.js';
 
-const projectList = [
-  {
-    title: 'Calculator App',
-    description: 'A sleek, modern calculator with dark mode and history tracking.',
-    tags: ['HTML', 'CSS', 'JavaScript'],
-    imgUrl: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=400&q=80', // Calculator/Math
-  },
-  {
-    title: 'To-Do List',
-    description: 'A highly interactive task manager with drag-and-drop and local storage persistence.',
-    tags: ['React', 'Tailwind', 'Vite'],
-    imgUrl: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=400&q=80', // Notebook/Checklist
-  },
-  {
-    title: 'Weather App',
-    description: 'Real-time weather forecasting using the OpenWeather API with dynamic backgrounds.',
-    tags: ['JavaScript', 'Fetch API', 'CSS Grid'],
-    imgUrl: 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=400&q=80', // Weather/Clouds
-  },
-  {
-    title: 'Digital Clock',
-    description: 'A minimalist digital clock with customizable themes and alarm functionality.',
-    tags: ['HTML', 'CSS', 'DOM Manipulation'],
-    imgUrl: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&w=400&q=80', // Clock
-  },
-  {
-    title: 'Currency Converter',
-    description: 'Live exchange rates converter built with seamless asynchronous API fetching.',
-    tags: ['JavaScript', 'REST API', 'JSON'],
-    imgUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=400&q=80', // Forex/Finance charts
-  },
-  {
-    title: 'Simple Chatbot',
-    description: 'An AI-powered rule-based chatbot interface for automated customer support.',
-    tags: ['Python', 'Flask', 'JavaScript'],
-    imgUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=400&q=80', // Robot
-  },
-  {
-    title: 'Database Design',
-    description: 'Optimized relational schemas mapped out for an e-commerce platform.',
-    tags: ['SQL', 'PostgreSQL', 'ER Diagrams'],
-    imgUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=400&q=80', // Servers
-  },
-  {
-    title: 'Simple Portal',
-    description: 'A secure employee authentication portal with JWT-based session management.',
-    tags: ['Node.js', 'Express', 'JWT'],
-    imgUrl: 'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?auto=format&fit=crop&w=400&q=80', // Login/Web
-  },
-  {
-    title: 'Library Management System',
-    description: 'A full-stack tracking system for borrowing, returning, and managing book inventories.',
-    tags: ['Java', 'Spring Boot', 'MySQL'],
-    imgUrl: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=400&q=80', // Library
-  },
-];
+const base = import.meta.env.BASE_URL;
 
-function renderCard({ title, description, tags, imgUrl }) {
+const STATUS_LABEL = {
+  live: 'Live',
+  'in-progress': 'In progress',
+  archived: 'Archived',
+};
+
+/** Deterministic gradient so a project without a screenshot still looks intentional. */
+function gradientFor(title) {
+  let hash = 0;
+  for (let i = 0; i < title.length; i++) hash = (hash * 31 + title.charCodeAt(i)) % 360;
+  return `linear-gradient(135deg, hsl(${hash} 65% 22%), hsl(${(hash + 55) % 360} 60% 34%))`;
+}
+
+function escapeHtml(str = '') {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function resolveImage(image) {
+  if (!image) return null;
+  return /^https?:\/\//.test(image) ? image : `${base}${image}`;
+}
+
+// ── Featured card ────────────────────────────────────────────────────────
+function featuredCard(project) {
+  const { title, blurb, highlights = [], tags = [], repo, demo, image, status } = project;
+  const img = resolveImage(image);
+
+  const media = img
+    ? `<img src="${img}" alt="${escapeHtml(title)} screenshot" loading="lazy" decoding="async" />`
+    : `<div class="card-media-fallback" style="background: ${gradientFor(title)};">
+         <span>${escapeHtml(title.slice(0, 1))}</span>
+       </div>`;
+
+  const links = [
+    repo
+      ? `<a href="${repo}" target="_blank" rel="noopener" class="card-link">
+           <i class="fa-brands fa-github" aria-hidden="true"></i> Code
+         </a>`
+      : '',
+    demo
+      ? `<a href="${demo}" target="_blank" rel="noopener" class="card-link card-link-primary">
+           <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Live demo
+         </a>`
+      : '',
+  ]
+    .filter(Boolean)
+    .join('');
+
   return `
-    <!-- Add data-title to pass to the modal -->
-    <div class="project-card" data-title="${title}">
-      <div class="project-card-header" style="background-image: url('${imgUrl}'); background-size: cover; background-position: center;"></div>
-      <div class="project-card-body">
-        <h3 class="project-title">${title}</h3>
-        <p class="project-description">${description}</p>
-        <div class="project-tech-stack">
-          <span class="tech-label">Technologies Used:</span>
-          <div class="project-tags">
-            ${tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
-          </div>
+    <article class="project-card featured-card" data-reveal>
+      <div class="card-media">
+        ${media}
+        ${status ? `<span class="card-status status-${status}">${STATUS_LABEL[status] || status}</span>` : ''}
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">${escapeHtml(title)}</h3>
+        <p class="card-blurb">${escapeHtml(blurb)}</p>
+        ${
+          highlights.length
+            ? `<ul class="card-highlights">
+                 ${highlights.map((h) => `<li>${escapeHtml(h)}</li>`).join('')}
+               </ul>`
+            : ''
+        }
+        <div class="card-tags">
+          ${tags.map((t) => `<span class="project-tag">${escapeHtml(t)}</span>`).join('')}
+        </div>
+        <div class="card-links">
+          ${links || '<span class="card-link card-link-muted">Repository coming soon</span>'}
         </div>
       </div>
-    </div>
+    </article>
   `;
 }
 
-export function Projects() {
-  // Render cards twice — the CSS marquee animates to -50%, creating a seamless infinite loop
-  const cards = [...projectList, ...projectList].map(renderCard).join('');
+// ── GitHub repo card ─────────────────────────────────────────────────────
+function repoCard(repo) {
+  const dot = languageColors[repo.language] || '#94a3b8';
 
   return `
-    <section id="projects" class="projects-section">
-      <div class="section-container">
-        <div class="section-label">My Work</div>
-        <h2 class="section-title">Projects</h2>
-      </div>
-      <div class="projects-carousel" id="projects-carousel">
-        <!-- We use an animation duration based on card count so it doesn't scroll too fast -->
-        <div class="projects-track" id="projects-track" style="animation-duration: 60s;">
-          ${cards}
+    <article class="project-card repo-card" data-reveal data-language="${escapeHtml(repo.language)}">
+      <div class="repo-card-top">
+        <i class="fa-regular fa-folder-open repo-icon" aria-hidden="true"></i>
+        <div class="repo-stats">
+          ${repo.stars ? `<span><i class="fa-regular fa-star" aria-hidden="true"></i> ${repo.stars}</span>` : ''}
+          ${repo.forks ? `<span><i class="fa-solid fa-code-fork" aria-hidden="true"></i> ${repo.forks}</span>` : ''}
         </div>
       </div>
-      
-      <div class="view-all-container">
-        <a href="#" class="view-all-btn" id="view-all-btn">View All Projects →</a>
+      <h3 class="card-title">
+        <a href="${repo.url}" target="_blank" rel="noopener">${escapeHtml(repo.title)}</a>
+      </h3>
+      <p class="card-blurb">${escapeHtml(repo.description)}</p>
+      ${
+        repo.topics.length
+          ? `<div class="card-tags">${repo.topics
+              .map((t) => `<span class="project-tag">${escapeHtml(t)}</span>`)
+              .join('')}</div>`
+          : ''
+      }
+      <div class="repo-card-foot">
+        ${
+          repo.language
+            ? `<span class="repo-lang"><span class="lang-dot" style="background:${dot}"></span>${escapeHtml(repo.language)}</span>`
+            : '<span class="repo-lang"></span>'
+        }
+        <span class="repo-updated">Updated ${relativeTime(repo.pushedAt)}</span>
+      </div>
+      <div class="card-links">
+        <a href="${repo.url}" target="_blank" rel="noopener" class="card-link">
+          <i class="fa-brands fa-github" aria-hidden="true"></i> Code
+        </a>
+        ${
+          repo.homepage
+            ? `<a href="${repo.homepage}" target="_blank" rel="noopener" class="card-link card-link-primary">
+                 <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Live
+               </a>`
+            : ''
+        }
+      </div>
+    </article>
+  `;
+}
+
+function skeletons(count = 6) {
+  return Array.from({ length: count })
+    .map(
+      () => `
+      <div class="project-card repo-skeleton" aria-hidden="true">
+        <div class="sk-line sk-sm"></div>
+        <div class="sk-line sk-lg"></div>
+        <div class="sk-line"></div>
+        <div class="sk-line sk-md"></div>
+        <div class="sk-line sk-sm"></div>
+      </div>`
+    )
+    .join('');
+}
+
+export function Projects() {
+  return `
+    <section id="projects" class="projects-section">
+      <div class="section-container" data-reveal>
+        <div class="section-label">My Work</div>
+        <h2 class="section-title">Projects</h2>
+        <p class="section-intro">
+          A few things I've built end to end, followed by everything I'm currently
+          pushing to GitHub — pulled live, so this list is never out of date.
+        </p>
       </div>
 
-      <!-- Under Development Modal -->
-      <div id="project-modal" class="project-modal">
-        <div class="project-modal-content">
-          <i class="fa-solid fa-person-digging modal-icon"></i>
-          <h3 id="modal-project-title">Project Name</h3>
-          <p id="modal-project-desc">This project is currently still under development.</p>
-          <button class="modal-close-btn" id="modal-close-btn">Close</button>
+      <div class="section-container">
+        <h3 class="subsection-title" data-reveal>Featured</h3>
+        <div class="projects-grid featured-grid">
+          ${featuredProjects.map(featuredCard).join('')}
+        </div>
+      </div>
+
+      <div class="section-container repos-block">
+        <div class="repos-header" data-reveal>
+          <h3 class="subsection-title">Live from GitHub</h3>
+          <a href="https://github.com/${profile.github}" target="_blank" rel="noopener" class="repos-profile-link">
+            <i class="fa-brands fa-github" aria-hidden="true"></i> @${profile.github}
+          </a>
+        </div>
+
+        <div class="repo-filters" id="repo-filters" hidden></div>
+
+        <div class="projects-grid" id="repo-grid">
+          ${skeletons()}
+        </div>
+
+        <div class="repo-message" id="repo-message" hidden></div>
+
+        <div class="view-all-container">
+          <button class="view-all-btn" id="repo-more" hidden>Show all repositories</button>
         </div>
       </div>
     </section>
   `;
 }
 
-// Attach modal event listeners
-export function initProjectsCarousel() {
-  const modal = document.getElementById('project-modal');
-  const modalCloseBtn = document.getElementById('modal-close-btn');
-  const modalTitle = document.getElementById('modal-project-title');
-  const modalDesc = document.getElementById('modal-project-desc');
-  const projectCards = document.querySelectorAll('.project-card');
-  const viewAllBtn = document.getElementById('view-all-btn');
+// ── Behaviour ────────────────────────────────────────────────────────────
+const INITIAL_COUNT = 6;
 
-  if (!modal) return;
+export async function initProjects() {
+  const grid = document.getElementById('repo-grid');
+  const message = document.getElementById('repo-message');
+  const moreBtn = document.getElementById('repo-more');
+  const filterBar = document.getElementById('repo-filters');
+  if (!grid) return;
 
-  // Open modal on card click
-  projectCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const title = card.getAttribute('data-title');
-      if (modalTitle) modalTitle.textContent = title;
-      if (modalDesc) modalDesc.textContent = 'This project is currently still under development.';
-      modal.classList.add('active');
-    });
-  });
+  let repos = [];
+  let activeLanguage = 'All';
+  let expanded = false;
 
-  // Open modal on View All click
-  if (viewAllBtn) {
-    viewAllBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (modalTitle) modalTitle.textContent = 'All Projects Archive';
-      if (modalDesc) modalDesc.textContent = 'This page is currently still in compilation.';
-      modal.classList.add('active');
-    });
-  }
+  const render = () => {
+    const filtered =
+      activeLanguage === 'All'
+        ? repos
+        : repos.filter((r) => r.language === activeLanguage);
 
-  // Close modal when clicking the close button
-  if (modalCloseBtn) {
-    modalCloseBtn.addEventListener('click', () => {
-      modal.classList.remove('active');
-    });
-  }
+    const visible = expanded ? filtered : filtered.slice(0, INITIAL_COUNT);
+    grid.innerHTML = visible.map(repoCard).join('');
+    revealWithin(grid);
 
-  // Close modal when clicking outside the modal content
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.classList.remove('active');
+    moreBtn.hidden = filtered.length <= INITIAL_COUNT;
+    moreBtn.textContent = expanded
+      ? 'Show fewer'
+      : `Show all ${filtered.length} repositories`;
+
+    if (!filtered.length) {
+      message.hidden = false;
+      message.textContent = `No public repositories in ${activeLanguage} yet.`;
+    } else {
+      message.hidden = true;
     }
+  };
+
+  const buildFilters = () => {
+    const languages = [...new Set(repos.map((r) => r.language).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b));
+
+    if (languages.length < 2) return;
+
+    filterBar.hidden = false;
+    filterBar.innerHTML = ['All', ...languages]
+      .map(
+        (lang) =>
+          `<button class="repo-filter${lang === 'All' ? ' is-active' : ''}" data-lang="${escapeHtml(lang)}">${escapeHtml(lang)}</button>`
+      )
+      .join('');
+
+    filterBar.addEventListener('click', (e) => {
+      const btn = e.target.closest('.repo-filter');
+      if (!btn) return;
+      activeLanguage = btn.dataset.lang;
+      expanded = false;
+      filterBar
+        .querySelectorAll('.repo-filter')
+        .forEach((b) => b.classList.toggle('is-active', b === btn));
+      render();
+    });
+  };
+
+  moreBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    render();
   });
+
+  try {
+    repos = await fetchRepos(profile.github, repoBlocklist);
+
+    if (!repos.length) {
+      grid.innerHTML = '';
+      message.hidden = false;
+      message.innerHTML = `No public repositories found yet. <a href="https://github.com/${profile.github}" target="_blank" rel="noopener">Visit the profile →</a>`;
+      return;
+    }
+
+    buildFilters();
+    render();
+  } catch (err) {
+    grid.innerHTML = '';
+    message.hidden = false;
+    message.innerHTML = `
+      <p>Couldn't load repositories: ${escapeHtml(err.message)}</p>
+      <a href="https://github.com/${profile.github}" target="_blank" rel="noopener" class="card-link card-link-primary">
+        <i class="fa-brands fa-github" aria-hidden="true"></i> Browse on GitHub instead
+      </a>`;
+  }
 }

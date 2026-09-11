@@ -1,60 +1,80 @@
 import './style.css';
 
-import { Hero }        from './sections/hero.js';
-import { About }       from './sections/about.js';
-import { Projects, initProjectsCarousel } from './sections/projects.js';
+import { profile } from './data/profile.js';
+import { Hero } from './sections/hero.js';
+import { About } from './sections/about.js';
+import { Projects, initProjects } from './sections/projects.js';
+import { Experience } from './sections/experience.js';
 import { Manifestoes } from './sections/manifestoes.js';
 import { Contact, initContactForm } from './sections/contact.js';
-import { typewriter }  from './utils/typewriter.js';
+import { typewriter, rotatingTypewriter } from './utils/typewriter.js';
+import {
+  initReveal,
+  initScrollProgress,
+  initActiveNav,
+  initNavScrollState,
+} from './utils/motion.js';
 
-// Assemble and render all sections into #app
+// ── Render ───────────────────────────────────────────────────────────────
 const app = document.querySelector('#app');
 app.innerHTML = [
   Hero(),
   About(),
   Projects(),
+  Experience(),
   Manifestoes(),
   Contact(),
 ].join('');
 
-// Typing animation — fires after DOM is ready
-typewriter('typed-name', 'Isaac Onyango Ouma', {
+// ── Hero typing animations ───────────────────────────────────────────────
+typewriter('typed-name', profile.name, {
   speed: 85,
   startDelay: 300,
   cursorId: 'hero-cursor',
 });
 
-// Initialize interactive sections
-initContactForm();
-initProjectsCarousel();
+rotatingTypewriter('typed-role', profile.roles, {
+  // Start once the name has finished typing so the two don't compete.
+  startDelay: 300 + profile.name.length * 85 + 500,
+});
 
-// Mobile Navigation Toggle
+// ── Section behaviour ────────────────────────────────────────────────────
+initContactForm();
+initProjects();
+
+// ── Scroll polish ────────────────────────────────────────────────────────
+initReveal();
+initScrollProgress();
+initActiveNav();
+initNavScrollState();
+
+// ── Footer year, so it never goes stale ──────────────────────────────────
+const yearEl = document.getElementById('footer-year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+// ── Mobile navigation ────────────────────────────────────────────────────
 const navToggle = document.getElementById('nav-toggle');
 const navLinks = document.getElementById('nav-links');
-const navLinkItems = document.querySelectorAll('.nav-link');
 
 if (navToggle && navLinks) {
-  navToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    
-    // Toggle icon (bars <-> xmark)
+  const setMenu = (open) => {
+    navLinks.classList.toggle('active', open);
+    navToggle.setAttribute('aria-expanded', String(open));
     const icon = navToggle.querySelector('i');
-    if (navLinks.classList.contains('active')) {
-      icon.classList.remove('fa-bars');
-      icon.classList.add('fa-xmark');
-    } else {
-      icon.classList.remove('fa-xmark');
-      icon.classList.add('fa-bars');
-    }
-  });
+    icon.classList.toggle('fa-bars', !open);
+    icon.classList.toggle('fa-xmark', open);
+  };
 
-  // Close menu when a link is clicked
-  navLinkItems.forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-      const icon = navToggle.querySelector('i');
-      icon.classList.remove('fa-xmark');
-      icon.classList.add('fa-bars');
-    });
+  navToggle.addEventListener('click', () =>
+    setMenu(!navLinks.classList.contains('active'))
+  );
+
+  document
+    .querySelectorAll('.nav-link')
+    .forEach((link) => link.addEventListener('click', () => setMenu(false)));
+
+  // Escape closes the menu — standard behaviour people expect.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setMenu(false);
   });
 }

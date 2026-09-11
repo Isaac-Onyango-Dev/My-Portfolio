@@ -1,0 +1,144 @@
+/* ── Experience & Education timeline ───────────────────── */
+.experience-section {
+  padding: 7rem 2rem;
+  background: var(--bg-alt);
+}
+
+.timeline {
+  position: relative;
+  list-style: none;
+  margin: 3rem 0 0;
+  padding: 0 0 0 3rem;
+  text-align: left;
+}
+
+/* The vertical rail the markers sit on. */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 1.05rem;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--border) 8%,
+    var(--border) 92%,
+    transparent
+  );
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -3rem;
+  top: 0.35rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 0.82rem;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.timeline-item:hover .timeline-marker {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.12);
+}
+
+.timeline-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.35rem 1.5rem;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.timeline-item:hover .timeline-card {
+  transform: translateX(4px);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.timeline-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.timeline-role {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.timeline-org {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+
+.timeline-when {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.76rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.timeline-period {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.timeline-points {
+  margin: 1rem 0 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.timeline-points li {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.timeline-points li::marker {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .experience-section { padding: 5rem 1.25rem; }
+
+  .timeline { padding-left: 2.4rem; }
+  .timeline::before { left: 0.85rem; }
+
+  .timeline-marker {
+    left: -2.4rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.7rem;
+  }
+
+  .timeline-head { flex-direction: column; }
+  .timeline-when { align-items: flex-start; }
+}

@@ -185,3 +185,48 @@
     max-width: 80%; /* Let it shrink fluidly */
   }
 }
+
+/* ── Skill groups ──────────────────────────────────────── */
+.about-text {
+  text-align: left;
+}
+
+.about-skill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  margin-top: 0.75rem;
+}
+
+.skill-group-title {
+  margin: 0 0 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.skill-chip i {
+  font-size: 0.95rem;
+}
+
+.skill-chip:hover {
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+/* Ring icons are decorative; pause them for reduced-motion visitors. */
+@media (prefers-reduced-motion: reduce) {
+  .tech-ring,
+  .tech-icon i {
+    animation: none !important;
+  }
+}

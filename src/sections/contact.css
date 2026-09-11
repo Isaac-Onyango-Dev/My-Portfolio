@@ -116,3 +116,118 @@
   color: var(--accent);
   transform: translateY(-3px);
 }
+
+/* ── Direct email link ─────────────────────────────────── */
+.contact-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: -1.25rem auto 2.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.contact-email-link:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* ── Form labels & validation ──────────────────────────── */
+.contact-form {
+  text-align: left;
+}
+
+.field-error {
+  min-height: 1rem;
+  font-size: 0.76rem;
+  color: #f87171;
+}
+
+.form-group input.is-invalid,
+.form-group textarea.is-invalid {
+  border-color: #f87171;
+}
+
+.form-group input.is-invalid:focus,
+.form-group textarea.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
+}
+
+.textarea-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.char-count {
+  font-size: 0.74rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Hidden from humans, irresistible to bots. */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Submit button states ──────────────────────────────── */
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.btn-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-spinner {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.btn-submit.is-loading .btn-spinner {
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Submission status message ─────────────────────────── */
+.form-status {
+  margin: 0;
+  min-height: 1.35rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.form-status.is-success { color: #5eead4; }
+.form-status.is-error   { color: #f87171; }
+.form-status.is-info    { color: var(--text-secondary); }
+
+/* ── Socials ───────────────────────────────────────────── */
+.social-link i {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .contact-section { padding: 5rem 1.25rem; }
+  .contact-socials { gap: 1.5rem; }
+}

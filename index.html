@@ -2,12 +2,73 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Personal portfolio — designer, developer, creator." />
-    <title>Portfolio | Isaac Onyango Ouma</title>
+    <meta name="theme-color" content="#121212" />
 
-    <!-- Google Fonts: Inter for body text -->
+    <title>Isaac Onyango Ouma — Full-Stack Developer</title>
+    <meta
+      name="description"
+      content="Isaac Onyango Ouma is a full-stack developer in Nairobi building reliable web applications with JavaScript, Node.js, Java and PostgreSQL. Open to junior developer roles and internships."
+    />
+    <meta name="author" content="Isaac Onyango Ouma" />
+    <link rel="canonical" href="https://isaac-onyango-dev.github.io/My-Portfolio/" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/My-Portfolio/logo.svg" />
+    <link rel="apple-touch-icon" href="/My-Portfolio/isaac-profile.png" />
+
+    <!-- Open Graph — how the link looks on LinkedIn, WhatsApp, Slack -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://isaac-onyango-dev.github.io/My-Portfolio/" />
+    <meta property="og:title" content="Isaac Onyango Ouma — Full-Stack Developer" />
+    <meta
+      property="og:description"
+      content="Full-stack developer building reliable web applications — from database schema to the pixels on screen. Open to junior roles and internships."
+    />
+    <meta
+      property="og:image"
+      content="https://isaac-onyango-dev.github.io/My-Portfolio/isaac-profile.png"
+    />
+    <meta property="og:image:alt" content="Portrait of Isaac Onyango Ouma" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- X / Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@isaaco62800" />
+    <meta name="twitter:title" content="Isaac Onyango Ouma — Full-Stack Developer" />
+    <meta
+      name="twitter:description"
+      content="Full-stack developer building reliable web applications. Open to junior roles and internships."
+    />
+    <meta
+      name="twitter:image"
+      content="https://isaac-onyango-dev.github.io/My-Portfolio/isaac-profile.png"
+    />
+
+    <!-- Structured data so search engines understand who this page is about -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Isaac Onyango Ouma",
+        "url": "https://isaac-onyango-dev.github.io/My-Portfolio/",
+        "image": "https://isaac-onyango-dev.github.io/My-Portfolio/isaac-profile.png",
+        "jobTitle": "Full-Stack Developer",
+        "email": "mailto:isaaco62800@gmail.com",
+        "address": { "@type": "PostalAddress", "addressLocality": "Nairobi", "addressCountry": "KE" },
+        "sameAs": [
+          "https://github.com/Isaac-Onyango-Dev",
+          "https://www.linkedin.com/in/isaac-onyango-334953374/",
+          "https://x.com/isaaco62800"
+        ],
+        "knowsAbout": [
+          "JavaScript", "Node.js", "Java", "Spring Boot", "Python",
+          "PostgreSQL", "MySQL", "MongoDB", "Docker", "REST APIs"
+        ]
+      }
+    </script>
+
+    <!-- Fonts: preconnect first so the swap happens sooner -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,15 +76,20 @@
       rel="stylesheet"
     />
 
-    <!-- FontAwesome for Icons -->
-    <link 
-      rel="stylesheet" 
+    <!-- FontAwesome for icons -->
+    <link
+      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
   </head>
   <body>
-    <!-- Premium Interactive Background -->
-    <div class="background-effects">
+    <a href="#hero" class="skip-link">Skip to content</a>
+
+    <!-- Reading progress -->
+    <div id="scroll-progress" aria-hidden="true"></div>
+
+    <!-- Ambient background -->
+    <div class="background-effects" aria-hidden="true">
       <div class="glow glow-1"></div>
       <div class="glow glow-2"></div>
       <div class="glow glow-3"></div>
@@ -31,32 +97,42 @@
     </div>
 
     <!-- Navigation -->
-    <nav id="navbar">
+    <nav id="navbar" aria-label="Main navigation">
       <div class="nav-inner">
-        <!-- Brand/Logo (Optional left align, we can just push right if empty) -->
         <div class="nav-brand">
-          <a href="#" class="font-bold tracking-widest text-[#6366f1]">IOO.</a>
+          <a href="#hero" aria-label="Back to top">IOO<span>.</span></a>
         </div>
-        
-        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+
+        <button
+          class="nav-toggle"
+          id="nav-toggle"
+          aria-label="Toggle navigation"
+          aria-controls="nav-links"
+          aria-expanded="false"
+        >
           <i class="fa-solid fa-bars"></i>
         </button>
-        
+
         <ul class="nav-links" id="nav-links">
           <li><a href="#about" class="nav-link">About</a></li>
           <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#experience" class="nav-link">Experience</a></li>
           <li><a href="#manifestoes" class="nav-link">Manifesto</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </div>
     </nav>
 
-    <!-- Main content — sections are injected here by main.js -->
+    <!-- Sections are rendered here by main.js -->
     <main id="app"></main>
 
-    <!-- Footer -->
     <footer id="footer">
-      <p>© 2026 Isaac Onyango Ouma · Built with Vite + TailwindCSS</p>
+      <p>
+        © <span id="footer-year">2026</span> Isaac Onyango Ouma · Built with Vite &amp; TailwindCSS ·
+        <a href="https://github.com/Isaac-Onyango-Dev/My-Portfolio" target="_blank" rel="noopener">
+          Source on GitHub
+        </a>
+      </p>
     </footer>
 
     <script type="module" src="/src/main.js"></script>
