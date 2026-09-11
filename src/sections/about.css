@@ -6,212 +6,113 @@
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 3rem;
+  align-items: start;
   margin-top: 3rem;
-}
-
-@media (max-width: 768px) {
-  .about-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
+  text-align: left;
 }
 
 .about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.about-text p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  font-size: 1.03rem;
+}
+
+/* ── Quick facts card ──────────────────────────────────── */
+.about-facts {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.about-facts ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
-.about-text p {
-  color: var(--text-secondary);
-  line-height: 1.8;
-  font-size: 1.05rem;
+.fact {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+
+.fact i {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.6rem;
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--accent);
+  font-size: 0.82rem;
+}
+
+.fact-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+.fact-value {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* ── Skills ────────────────────────────────────────────── */
+.about-skill-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.skill-group-title {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .about-skills {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-}
-
-.skill-chip {
-  padding: 0.35rem 1rem;
-  border-radius: 9999px;
-  border: 1px solid var(--border);
-  font-size: 0.82rem;
-  color: var(--accent);
-  background: rgba(99,102,241,0.06);
-  letter-spacing: 0.03em;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-.skill-chip:hover {
-  background: rgba(99,102,241,0.15);
-  border-color: var(--accent);
-}
-
-.about-image-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 560px; /* provide enough height for the larger ring */
-}
-
-.about-image {
-  width: 100%;
-  max-width: 320px;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border-radius: 1.5rem;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  border: 1px solid var(--border);
-  transition: transform 0.4s ease;
-  position: relative;
-  z-index: 10; /* Keep image on top */
-}
-
-.about-image:hover {
-  transform: translateY(-8px);
-}
-
-/* ── Rotating Tech Ring ───────────────────────────────── */
-.tech-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 540px;
-  height: 540px;
-  margin-top: -270px;
-  margin-left: -270px;
-  border-radius: 50%;
-  animation: rotateRing 35s linear infinite; /* slightly slower for larger circumference */
-  z-index: 1; /* Behind the image */
-  pointer-events: none; /* Let clicks pass through to image */
-}
-
-/* Individual Icon */
-.tech-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 50px;
-  height: 50px;
-  margin: -25px 0 0 -25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  opacity: 1; /* show full brand colors */
-  background: var(--card-bg); /* subtle backdrop */
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  /* 
-    1. Rotate outward based on its index and total items
-    2. Translate along radius (270px)
-    3. Counter-rotate so it stays upright
-  */
-  transform: rotate(calc(360deg / var(--total) * var(--i))) translateY(-270px) rotate(calc(-360deg / var(--total) * var(--i)));
-}
-
-/* Counter-rotation animation so icons stay upright while parent rotates */
-.tech-icon i {
-  animation: counterRotate 35s linear infinite;
-}
-
-@keyframes rotateRing {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes counterRotate {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(-360deg); }
-}
-
-/* Responsiveness */
-@media (max-width: 1024px) {
-  .tech-ring {
-    width: 440px;
-    height: 440px;
-    margin-top: -220px;
-    margin-left: -220px;
-  }
-  .tech-icon {
-    font-size: 1.6rem;
-    width: 44px;
-    height: 44px;
-    margin: -22px 0 0 -22px;
-    transform: rotate(calc(360deg / var(--total) * var(--i))) translateY(-220px) rotate(calc(-360deg / var(--total) * var(--i)));
-  }
-}
-
-@media (max-width: 768px) {
-  .about-image-wrapper {
-    min-height: 460px; /* shrink container */
-  }
-  .tech-ring {
-    width: 360px;
-    height: 360px;
-    margin-top: -180px;
-    margin-left: -180px;
-  }
-  .tech-icon {
-    font-size: 1.4rem;
-    width: 38px;
-    height: 38px;
-    margin: -19px 0 0 -19px;
-    transform: rotate(calc(360deg / var(--total) * var(--i))) translateY(-180px) rotate(calc(-360deg / var(--total) * var(--i)));
-  }
-  .about-image {
-    max-width: 260px;
-  }
-}
-
-@media (max-width: 440px) {
-  .tech-ring {
-    display: none; /* Only hide on very small phones if it overlaps boundaries */
-  }
-  .about-image-wrapper {
-    min-height: auto;
-  }
-  .about-image {
-    max-width: 80%; /* Let it shrink fluidly */
-  }
-}
-
-/* ── Skill groups ──────────────────────────────────────── */
-.about-text {
-  text-align: left;
-}
-
-.about-skill-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 1.35rem;
-  margin-top: 0.75rem;
-}
-
-.skill-group-title {
-  margin: 0 0 0.6rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
+  gap: 0.55rem;
 }
 
 .skill-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.82rem;
   color: var(--text-secondary);
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
 }
 
 .skill-chip i {
@@ -220,13 +121,23 @@
 
 .skill-chip:hover {
   color: var(--text-primary);
+  border-color: var(--accent);
+  background: rgba(99, 102, 241, 0.1);
   transform: translateY(-2px);
 }
 
-/* Ring icons are decorative; pause them for reduced-motion visitors. */
-@media (prefers-reduced-motion: reduce) {
-  .tech-ring,
-  .tech-icon i {
-    animation: none !important;
+/* The section's second block needs breathing room from the first. */
+.about-section .section-container + .section-container {
+  margin-top: 4rem;
+}
+
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
+}
+
+@media (max-width: 640px) {
+  .about-section { padding: 5rem 1.25rem; }
 }

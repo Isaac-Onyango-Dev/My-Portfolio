@@ -12,7 +12,6 @@
 export const profile = {
   // ── Identity ──────────────────────────────────────────────────────────
   name: 'Isaac Onyango Ouma',
-  initials: 'IOO.',
   roles: [
     'Computer Science Student',
     'Software Developer',
@@ -23,11 +22,11 @@ export const profile = {
     'I build practical software that solves real problems — desktop apps, web platforms, databases and the automation that ties them together.',
   location: 'Kenya',
   openToWork: true,
-  availability: 'Open to junior developer roles & internships',
+  availability: 'Open to junior roles & internships',
 
   // ── Contact ───────────────────────────────────────────────────────────
   email: 'isaaco62800@gmail.com',
-  phone: '', // TODO add if you want it public
+  phone: '+254 742 028 905',
   // Sits in /public. Leave '' to hide the download button.
   resumeFile: 'Isaac-Onyango-Ouma-CV.pdf',
 
@@ -50,18 +49,38 @@ export const profile = {
 
 // ── About copy ──────────────────────────────────────────────────────────
 export const aboutParagraphs = [
-  `I'm a Computer Science student at Moi University and a software developer who
-   learns by building. Desktop applications, web platforms, database systems,
-   developer tools — if it solves a real problem, I want to build it and ship it.`,
+  `I'm a Computer Science student at Moi University TVET Institute and a software
+   developer who learns by building. Desktop applications, web platforms, database
+   systems, developer tools — if it solves a real problem, I want to build it and
+   ship it.`,
 
   `My work spans the whole stack: React and TypeScript on the front, Python and
    SQL behind it, Docker and GitHub Actions to get it out the door. I care about
    the parts nobody demos — sensible schema design, honest error handling, and
    packaging that actually works on someone else's machine.`,
 
-  `Alongside that I'm exploring AI integration, cybersecurity and cloud
-   infrastructure. I'm looking for a junior developer role or internship where I
-   can learn from people who ship at scale and contribute from day one.`,
+  `Alongside that I'm exploring AI integration, cybersecurity, cloud infrastructure
+   and game development with Unity, Unreal Engine and Blender. I'm looking for a
+   junior developer role or internship where I can learn from people who ship at
+   scale and contribute from day one.`,
+];
+
+// ── Quick facts ─────────────────────────────────────────────────────────
+// The card beside the About copy. Short, scannable, recruiter-friendly.
+export const quickFacts = [
+  { icon: 'fa-solid fa-graduation-cap', label: 'Studying',  value: 'Diploma in Computer Science, Moi University TVET Institute' },
+  { icon: 'fa-solid fa-location-dot',   label: 'Based in',  value: 'Kenya · open to remote' },
+  { icon: 'fa-solid fa-certificate',    label: 'Certified', value: 'Six certificates across systems, networking, data and the web' },
+  { icon: 'fa-solid fa-compass',        label: 'Exploring', value: 'AI integration, cybersecurity, cloud and game development' },
+];
+
+// ── Headline numbers ────────────────────────────────────────────────────
+// `source: 'repos'` is filled in at runtime from the GitHub API.
+export const stats = [
+  { value: '6',  label: 'Projects shipped' },
+  { value: null, label: 'Public repositories', source: 'repos' },
+  { value: '6',  label: 'Certifications' },
+  { value: '20', label: 'Technologies used' },
 ];
 
 // ── Skills, grouped ─────────────────────────────────────────────────────
@@ -126,7 +145,7 @@ export const featuredProjects = [
   {
     title: 'MediaGrab',
     blurb:
-      'Cross-platform media downloader for Windows, Linux and macOS, with a modern GUI, playlist support and full control over every download.',
+      'Cross-platform desktop media downloader for Windows and Linux, with a modern GUI, playlist support and full control over every download.',
     highlights: [
       'CustomTkinter interface with download history and playlist selection',
       'Pause, resume, cancel, retry and delete on any download',
@@ -238,27 +257,27 @@ export const timeline = [
   },
   {
     kind: 'education',
-    role: 'BSc, Computer Science',
-    org: 'Moi University',
+    role: 'Diploma in Computer Science',
+    org: 'Moi University TVET Institute',
     period: 'In progress', // TODO add your start and expected finish years
     location: 'Kenya',
     points: [
       'Coursework in programming, database systems, computer networks and operating systems.',
-      'Further study in software development, web technologies, computer architecture and systems analysis.',
+      'Further study in computer architecture, web design and graphics design.',
     ],
-    tags: ['Databases', 'Networks', 'Operating Systems', 'Systems Analysis'],
+    tags: ['Databases', 'Networks', 'Operating Systems', 'Web Design'],
   },
   {
     kind: 'certification',
     role: 'Professional Certificates',
-    org: 'Operating Systems · Networking · Graphics Design · Office Applications',
+    org: 'Six certificates across systems, networking, data and the web',
     period: 'Completed',
     location: 'Kenya',
     points: [
-      'Certificate in Operating Systems and Certificate in Computer Networking.',
-      'Certificate in Graphics Design and Certificate in Computer/Office Applications.',
+      'Operating Systems · Computer Networking · Computer Organization and Architecture.',
+      'Database Management · Web Development · Graphics Design.',
     ],
-    tags: ['Operating Systems', 'Networking', 'Design'],
+    tags: ['Operating Systems', 'Networking', 'Databases', 'Web Development'],
   },
 ];
 

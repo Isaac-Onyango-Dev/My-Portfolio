@@ -17,7 +17,7 @@ Anything still marked `// TODO` in that file is a placeholder waiting for you.
 
 The content is already filled in from your CV. What's left:
 
-1. **Dates** — `timeline` needs your degree start and expected finish years, and the
+1. **Dates** — `timeline` needs your diploma start and expected finish years, and the
    year you started with Complex Developers.
 2. **Screenshots** — drop images into `public/` and set `image: 'my-shot.png'` on the
    matching entry in `featuredProjects`. They currently fall back to generated
@@ -25,7 +25,9 @@ The content is already filled in from your CV. What's left:
 3. **School Portal System** — add its `repo` URL once the code is on GitHub.
 4. **CV** — `public/Isaac-Onyango-Ouma-CV.pdf` is generated from your Word document.
    Regenerate it whenever you update the .docx.
-5. **Open to work** — set `profile.openToWork` to `false` once you land the role.
+5. **Headline numbers** — the `stats` array feeds the strip under the hero. The
+   repository count fills itself in from GitHub; the rest are yours to keep current.
+6. **Open to work** — set `profile.openToWork` to `false` once you land the role.
 
 ## Contact form
 
@@ -78,7 +80,7 @@ src/sections/           one .js + .css pair per section
 src/utils/github.js     GitHub API client with caching
 src/utils/motion.js     scroll reveal, progress bar, active nav link
 src/utils/typewriter.js hero typing and rotating role animations
-public/                 images, CV, robots.txt, sitemap.xml
+public/                 logo, portrait, CV, robots.txt, sitemap.xml
 ```
 
 ## Accessibility and performance notes

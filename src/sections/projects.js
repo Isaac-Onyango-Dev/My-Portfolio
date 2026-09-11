@@ -261,6 +261,10 @@ export async function initProjects() {
   try {
     repos = await fetchRepos(profile.github, repoBlocklist);
 
+    // The hero's repository count is only knowable once GitHub answers.
+    const repoStat = document.querySelector('[data-stat-source="repos"]');
+    if (repoStat) repoStat.textContent = repos.length;
+
     if (!repos.length) {
       grid.innerHTML = '';
       message.hidden = false;

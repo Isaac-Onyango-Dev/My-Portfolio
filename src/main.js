@@ -48,6 +48,12 @@ initScrollProgress();
 initActiveNav();
 initNavScrollState();
 
+// ── Brand mark ───────────────────────────────────────────────────────────
+// Set here rather than in index.html: a root-relative src there is correct in
+// the build but double-prefixed by Vite's dev server, so it 404s in preview.
+const brandMark = document.getElementById('brand-mark');
+if (brandMark) brandMark.src = `${import.meta.env.BASE_URL}logo.svg`;
+
 // ── Footer year, so it never goes stale ──────────────────────────────────
 const yearEl = document.getElementById('footer-year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
