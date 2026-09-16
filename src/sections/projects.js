@@ -1,6 +1,13 @@
 import './projects.css';
-import { profile, featuredProjects, repoBlocklist } from '../data/profile.js';
-import { fetchRepos, languageColors, relativeTime } from '../utils/github.js';
+import { profile, projectNotes, extraProjects, repoBlocklist } from '../data/profile.js';
+import {
+  fetchRepos,
+  fetchPinnedSnapshot,
+  pickFeatured,
+  safeUrl,
+  languageColors,
+  relativeTime,
+} from '../utils/github.js';
 import { revealWithin } from '../utils/motion.js';
 
 const base = import.meta.env.BASE_URL;
@@ -33,7 +40,9 @@ function resolveImage(image) {
 
 // ── Featured card ────────────────────────────────────────────────────────
 function featuredCard(project) {
-  const { title, blurb, highlights = [], tags = [], repo, demo, image, status } = project;
+  const { title, blurb, highlights = [], tags = [], image, status } = project;
+  const repo = safeUrl(project.repo);
+  const demo = safeUrl(project.demo);
   const img = resolveImage(image);
 
   const media = img
@@ -65,7 +74,7 @@ function featuredCard(project) {
       </div>
       <div class="card-body">
         <h3 class="card-title">${escapeHtml(title)}</h3>
-        <p class="card-blurb">${escapeHtml(blurb)}</p>
+        <p class="card-blurb">${escapeHtml(blurb || 'No description yet.')}</p>
         ${
           highlights.length
             ? `<ul class="card-highlights">
@@ -87,6 +96,8 @@ function featuredCard(project) {
 // ── GitHub repo card ─────────────────────────────────────────────────────
 function repoCard(repo) {
   const dot = languageColors[repo.language] || '#94a3b8';
+  const url = safeUrl(repo.url);
+  const homepage = safeUrl(repo.homepage);
 
   return `
     <article class="project-card repo-card" data-reveal data-language="${escapeHtml(repo.language)}">
@@ -98,9 +109,9 @@ function repoCard(repo) {
         </div>
       </div>
       <h3 class="card-title">
-        <a href="${repo.url}" target="_blank" rel="noopener">${escapeHtml(repo.title)}</a>
+        <a href="${url}" target="_blank" rel="noopener">${escapeHtml(repo.title)}</a>
       </h3>
-      <p class="card-blurb">${escapeHtml(repo.description)}</p>
+      <p class="card-blurb">${escapeHtml(repo.description || 'No description yet.')}</p>
       ${
         repo.topics.length
           ? `<div class="card-tags">${repo.topics
@@ -117,12 +128,12 @@ function repoCard(repo) {
         <span class="repo-updated">Updated ${relativeTime(repo.pushedAt)}</span>
       </div>
       <div class="card-links">
-        <a href="${repo.url}" target="_blank" rel="noopener" class="card-link">
+        <a href="${url}" target="_blank" rel="noopener" class="card-link">
           <i class="fa-brands fa-github" aria-hidden="true"></i> Code
         </a>
         ${
-          repo.homepage
-            ? `<a href="${repo.homepage}" target="_blank" rel="noopener" class="card-link card-link-primary">
+          homepage
+            ? `<a href="${homepage}" target="_blank" rel="noopener" class="card-link card-link-primary">
                  <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Live
                </a>`
             : ''
@@ -154,15 +165,15 @@ export function Projects() {
         <div class="section-label">My Work</div>
         <h2 class="section-title">Projects</h2>
         <p class="section-intro">
-          A few things I've built end to end, followed by everything I'm currently
-          pushing to GitHub — pulled live, so this list is never out of date.
+          The projects I've pinned on GitHub, followed by everything else I'm
+          pushing there — all pulled straight from GitHub, so this is never out of date.
         </p>
       </div>
 
       <div class="section-container">
         <h3 class="subsection-title" data-reveal>Featured</h3>
-        <div class="projects-grid featured-grid">
-          ${featuredProjects.map(featuredCard).join('')}
+        <div class="projects-grid featured-grid" id="featured-grid">
+          ${skeletons(3)}
         </div>
       </div>
 
@@ -194,6 +205,7 @@ export function Projects() {
 const INITIAL_COUNT = 6;
 
 export async function initProjects() {
+  const featuredGrid = document.getElementById('featured-grid');
   const grid = document.getElementById('repo-grid');
   const message = document.getElementById('repo-message');
   const moreBtn = document.getElementById('repo-more');
@@ -258,17 +270,39 @@ export async function initProjects() {
     render();
   });
 
-  try {
-    repos = await fetchRepos(profile.github, repoBlocklist);
+  const [liveResult, pinned] = await Promise.all([
+    fetchRepos(profile.github, repoBlocklist).then(
+      (list) => ({ list }),
+      (error) => ({ error })
+    ),
+    fetchPinnedSnapshot(import.meta.env.BASE_URL),
+  ]);
+  const live = liveResult.list || null;
 
-    // The hero's repository count is only knowable once GitHub answers.
-    const repoStat = document.querySelector('[data-stat-source="repos"]');
-    if (repoStat) repoStat.textContent = repos.length;
+  const featured = pickFeatured({ pinned, live, notes: projectNotes, blocklist: repoBlocklist });
+  featuredGrid.innerHTML = [...featured, ...extraProjects].map(featuredCard).join('');
+  revealWithin(featuredGrid);
+
+  // Hero numbers that only GitHub can answer.
+  const setStat = (source, value) => {
+    const el = document.querySelector(`[data-stat-source="${source}"]`);
+    if (el) el.textContent = value;
+  };
+
+  try {
+    if (liveResult.error) throw liveResult.error;
+
+    setStat('repos', live.length);
+    setStat('shipped', live.filter((r) => safeUrl(r.homepage)).length);
+
+    // Featured repos already have a card above; don't show them twice.
+    const featuredNames = new Set(featured.map((f) => f.name));
+    repos = live.filter((r) => !featuredNames.has(r.name));
 
     if (!repos.length) {
       grid.innerHTML = '';
       message.hidden = false;
-      message.innerHTML = `No public repositories found yet. <a href="https://github.com/${profile.github}" target="_blank" rel="noopener">Visit the profile →</a>`;
+      message.innerHTML = `${live.length ? 'Everything public is featured above.' : 'No public repositories found yet.'} <a href="https://github.com/${profile.github}" target="_blank" rel="noopener">Visit the profile →</a>`;
       return;
     }
 

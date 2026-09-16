@@ -5,7 +5,7 @@
  * and responses are cached in sessionStorage so a visitor costs one request.
  */
 
-const CACHE_KEY = 'gh-repos-cache-v1';
+const CACHE_KEY = 'gh-repos-cache-v2';
 const CACHE_TTL = 1000 * 60 * 30; // 30 minutes
 
 /** Approximate brand colours for the languages likely to appear. */
@@ -83,7 +83,7 @@ export async function fetchRepos(username, blocklist = []) {
     .map((r) => ({
       name: r.name,
       title: prettify(r.name),
-      description: r.description || 'No description yet.',
+      description: r.description || '',
       url: r.html_url,
       homepage: r.homepage || '',
       language: r.language || '',
@@ -98,7 +98,7 @@ export async function fetchRepos(username, blocklist = []) {
 }
 
 /** my-cool-repo → My Cool Repo */
-function prettify(name) {
+export function prettify(name) {
   return name
     .replace(/[-_]+/g, ' ')
     .replace(/\s+/g, ' ')
@@ -123,4 +123,56 @@ export function relativeTime(iso) {
     if (value >= 1) return `${value} ${unit}${value > 1 ? 's' : ''} ago`;
   }
   return 'just now';
+}
+
+/** Only http(s) links reach an href — a repo homepage is free text on GitHub. */
+export function safeUrl(url) {
+  return /^https?:\/\//i.test(url || '') ? url : '';
+}
+
+/** Pinned repos from the nightly build snapshot, or null if there isn't one. */
+export async function fetchPinnedSnapshot(base) {
+  try {
+    const res = await fetch(`${base}github.json`);
+    return res.ok ? (await res.json()).pinned : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Decides the featured projects.
+ *
+ * @param {object}  args
+ * @param {Array?}  args.pinned     repos from the snapshot (null if unavailable)
+ * @param {Array?}  args.live       repos from the live API (null if it failed)
+ * @param {object}  args.notes      hand-written copy keyed by repo name
+ * @param {string[]} args.blocklist repo names never to show
+ */
+export function pickFeatured({ pinned, live, notes, blocklist = [] }) {
+  const liveByName = live ? new Map(live.map((r) => [r.name, r])) : null;
+  const hasNotes = (r) => Object.hasOwn(notes, r.name);
+
+  // Pins lead. With no pins, fall back to the repos you've written notes for.
+  const source = pinned?.length ? pinned : (live || []).filter(hasNotes);
+
+  return source
+    .filter((r) => !blocklist.includes(r.name))
+    // The snapshot can be a day old; trust the live API about what still exists.
+    .filter((r) => !liveByName || liveByName.has(r.name))
+    .map((snap) => {
+      const r = { ...snap, ...liveByName?.get(snap.name) };
+      const n = hasNotes(r) ? notes[r.name] : {};
+      return {
+        name: r.name,
+        title: n.title || prettify(r.name),
+        blurb: n.blurb || r.description,
+        highlights: n.highlights || [],
+        tags: n.tags || [r.language, ...(r.topics || [])].filter(Boolean),
+        repo: r.url,
+        demo: r.homepage,
+        image: n.image || snap.image || null,
+        status: n.status || (r.homepage ? 'live' : null),
+      };
+    });
 }

@@ -13,21 +13,46 @@ Open [`src/data/profile.js`](src/data/profile.js). It holds your name, bio, cont
 details, skills, featured projects, work history and manifesto. Edit that file and the
 whole site updates — no other file contains your personal information.
 
-Anything still marked `// TODO` in that file is a placeholder waiting for you.
+Things worth keeping current:
 
-The content is already filled in from your CV. What's left:
-
-1. **Dates** — `timeline` needs your diploma start and expected finish years, and the
-   year you started with Complex Developers.
-2. **Screenshots** — drop images into `public/` and set `image: 'my-shot.png'` on the
-   matching entry in `featuredProjects`. They currently fall back to generated
-   gradients.
-3. **School Portal System** — add its `repo` URL once the code is on GitHub.
+1. **Featured projects** — pin them on your GitHub profile. See below.
+2. **Project copy** — optional hand-written blurbs and highlights live in
+   `projectNotes`, keyed by repo name. `extraProjects` holds work that isn't a
+   public repo yet.
+3. **Screenshots** — set a custom social preview on the repo (Settings → Social
+   preview) and the featured card uses it. Or drop an image into `public/` and set
+   `image` in that repo's notes.
 4. **CV** — `public/Isaac-Onyango-Ouma-CV.pdf` is generated from your Word document.
    Regenerate it whenever you update the .docx.
-5. **Headline numbers** — the `stats` array feeds the strip under the hero. The
-   repository count fills itself in from GitHub; the rest are yours to keep current.
-6. **Open to work** — set `profile.openToWork` to `false` once you land the role.
+5. **Open to work** — set `profile.openToWork` to `false` once you land the role.
+
+## The site keeps itself in sync with GitHub
+
+| You do this on GitHub | The site shows it |
+|---|---|
+| Create, delete, rename or describe a repo | Next page load |
+| Add a homepage URL or topics | Next page load |
+| Pin or unpin a repo | After the nightly rebuild, or instantly via **Actions → Run workflow** |
+
+- **Featured** is your pinned repos, in pin order. A pinned repo that has since been
+  deleted is dropped immediately. With nothing pinned, it falls back to the repos
+  in `projectNotes`.
+- **Live from GitHub** is every other public repo, fetched in the visitor's
+  browser. Forks, archived repos and `repoBlocklist` are skipped.
+- **Headline numbers** for shipped projects and repositories are counted live.
+  A repo counts as shipped when it has a homepage URL.
+
+Pins are only available from GitHub's GraphQL API, which needs a token, so
+`scripts/sync-github.mjs` fetches them at build time into `public/github.json`.
+The deploy workflow passes its built-in token and runs every night. No secrets to
+set up. To test the pinned view locally:
+
+```bash
+GITHUB_TOKEN=<a personal token with no scopes> npm run build
+```
+
+GitHub pauses scheduled workflows in repos with no activity for 60 days. Any push
+turns it back on.
 
 ## Contact form
 
@@ -61,14 +86,15 @@ Then open the URL Vite prints. Note the site is served under `/My-Portfolio/` to
 the GitHub Pages path, set by `base` in `vite.config.js`.
 
 ```bash
-npm run build     # production build into dist/
+npm test          # checks the featured-project rules
+npm run build     # syncs pins (if GITHUB_TOKEN is set), then builds into dist/
 npm run preview   # serve the production build locally
 ```
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the site and
-publishes `dist/` to GitHub Pages. Nothing to run by hand.
+`.github/workflows/deploy.yml` tests, builds and publishes `dist/` to GitHub Pages on
+every push to `main`, every night, and whenever you press **Run workflow**.
 
 ## Project structure
 
@@ -77,7 +103,8 @@ index.html              markup shell, SEO tags, navbar, footer
 src/main.js             renders every section and starts the interactions
 src/data/profile.js     ← all your personal content
 src/sections/           one .js + .css pair per section
-src/utils/github.js     GitHub API client with caching
+src/utils/github.js     GitHub API client, caching, featured-project rules
+scripts/sync-github.mjs build-time snapshot of pinned repos
 src/utils/motion.js     scroll reveal, progress bar, active nav link
 src/utils/typewriter.js hero typing and rotating role animations
 public/                 logo, portrait, CV, robots.txt, sitemap.xml

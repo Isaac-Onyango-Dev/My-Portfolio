@@ -4,8 +4,7 @@
  * whole portfolio updates. No other file should contain your bio, links,
  * job history or project details.
  *
- * Content below is taken from your CV. Anything still marked // TODO is a
- * detail the CV did not specify.
+ * Content below is taken from your CV.
  * ───────────────────────────────────────────────────────────────────────
  */
 
@@ -74,15 +73,6 @@ export const quickFacts = [
   { icon: 'fa-solid fa-compass',        label: 'Exploring', value: 'AI integration, cybersecurity, cloud and game development' },
 ];
 
-// ── Headline numbers ────────────────────────────────────────────────────
-// `source: 'repos'` is filled in at runtime from the GitHub API.
-export const stats = [
-  { value: '6',  label: 'Projects shipped' },
-  { value: null, label: 'Public repositories', source: 'repos' },
-  { value: '6',  label: 'Certifications' },
-  { value: '20', label: 'Technologies used' },
-];
-
 // ── Skills, grouped ─────────────────────────────────────────────────────
 export const skillGroups = [
   {
@@ -123,12 +113,27 @@ export const skillGroups = [
   },
 ];
 
+// ── Headline numbers ────────────────────────────────────────────────────
+// `source` values are counted at runtime from GitHub:
+//   'shipped' = public repos with a live homepage, 'repos' = public repos.
+export const stats = [
+  { label: 'Projects shipped', source: 'shipped' },
+  { label: 'Public repositories', source: 'repos' },
+  { label: 'Certifications', value: '6' },
+  { label: 'Technologies used', value: String(skillGroups.flatMap((g) => g.items).length) },
+];
+
 // ── Featured projects ───────────────────────────────────────────────────
-// These sit above the auto-pulled GitHub repos.
-// `image` is a file in /public, a full URL, or null for a generated gradient.
-export const featuredProjects = [
-  {
-    title: 'Internet Download Hub',
+// The featured section shows whatever you PIN on your GitHub profile, synced
+// nightly. Pin or unpin a repo on GitHub and the portfolio follows.
+//
+// Notes below are optional, keyed by repo name. A pinned repo with no notes
+// still shows, using its GitHub description, language and topics. Repo and
+// demo links always come from GitHub, so they can never go stale here.
+// `image` is a file in /public or a full URL; otherwise the repo's custom
+// social preview is used, then a generated gradient.
+export const projectNotes = {
+  'Internet-Download-Hub': {
     blurb:
       'A free Windows desktop application for downloading video and audio from across the web, built around a clean, fast interface.',
     highlights: [
@@ -137,13 +142,8 @@ export const featuredProjects = [
       'Automated builds and releases via GitHub Actions',
     ],
     tags: ['TypeScript', 'Desktop', 'Electron', 'CI/CD'],
-    repo: 'https://github.com/Isaac-Onyango-Dev/Internet-Download-Hub',
-    demo: 'https://isaac-onyango-dev.github.io/Internet-Download-Hub/',
-    image: null,
-    status: 'live',
   },
-  {
-    title: 'MediaGrab',
+  MediaGrab: {
     blurb:
       'Cross-platform desktop media downloader for Windows and Linux, with a modern GUI, playlist support and full control over every download.',
     highlights: [
@@ -153,13 +153,8 @@ export const featuredProjects = [
       'Release pipeline automated with GitHub Actions',
     ],
     tags: ['Python', 'CustomTkinter', 'FFmpeg', 'GitHub Actions'],
-    repo: 'https://github.com/Isaac-Onyango-Dev/MediaGrab',
-    demo: 'https://isaac-onyango-dev.github.io/MediaGrab/',
-    image: null,
-    status: 'live',
   },
-  {
-    title: 'ScamShield',
+  ScamShield: {
     blurb:
       'A tool that helps people detect and report suspicious online job and service listings before they lose money to them.',
     highlights: [
@@ -168,42 +163,22 @@ export const featuredProjects = [
       'Responsive TypeScript front end',
     ],
     tags: ['TypeScript', 'Web App', 'Security'],
-    repo: 'https://github.com/Isaac-Onyango-Dev/ScamShield',
-    demo: 'https://isaac-onyango-dev.github.io/ScamShield/',
-    image: null,
-    status: 'live',
   },
-  {
-    title: 'Streamer Hub',
-    blurb:
-      'A streaming platform in the spirit of modern services: cinematic hero sections, content sliders, search and episode organisation over live APIs.',
-    highlights: [
-      'API-driven content retrieval with pagination',
-      'Trending and completed sections with search',
-      'Worked around real provider and API limitations',
-      'Responsive UI across phone, tablet and desktop',
-    ],
-    tags: ['TypeScript', 'REST APIs', 'UI/UX'],
-    repo: 'https://github.com/Isaac-Onyango-Dev/Streamer-Hub',
-    demo: 'https://isaac-onyango-dev.github.io/Streamer-Hub/',
-    image: null,
-    status: 'live',
-  },
-  {
+  'Complex-Developers-Web': {
     title: 'Complex Developers',
     blurb:
-      'The brand and website for a software development studio offering web, software, game, AI and cybersecurity work.',
+      'The brand and website for the software development studio I co-founded, offering web, software, game, AI and cybersecurity work.',
     highlights: [
       'Brand identity and service positioning',
       'Marketing site deployed on Vercel',
       'SEO groundwork and conversion-focused layout',
     ],
     tags: ['Web Design', 'Branding', 'Vercel'],
-    repo: 'https://github.com/Isaac-Onyango-Dev/Complex-Developers-Web',
-    demo: 'https://complex-developers-web.vercel.app/',
-    image: null,
-    status: 'live',
   },
+};
+
+// Projects that aren't a public repo yet. Shown after the pinned ones.
+export const extraProjects = [
   {
     title: 'School Portal System',
     blurb:
@@ -215,9 +190,8 @@ export const featuredProjects = [
       'Designed for scalability and clear data organisation',
     ],
     tags: ['Database Design', 'SQL', 'Full-Stack'],
-    repo: '', // TODO add once the code is on GitHub
+    repo: '',
     demo: '',
-    image: null,
     status: 'in-progress',
   },
 ];
@@ -231,9 +205,9 @@ export const repoBlocklist = ['My-Portfolio', 'Isaac-Onyango-Dev'];
 export const timeline = [
   {
     kind: 'work',
-    role: 'Developer',
+    role: 'Co-Founder',
     org: 'Complex Developers',
-    period: 'Present', // TODO add the year you started
+    period: '2025 — Present',
     location: 'Remote',
     points: [
       'Building the brand and web presence for a software studio offering web, software, game and AI development.',
@@ -259,7 +233,7 @@ export const timeline = [
     kind: 'education',
     role: 'Diploma in Computer Science',
     org: 'Moi University TVET Institute',
-    period: 'In progress', // TODO add your start and expected finish years
+    period: 'May 2025 — Sep 2027',
     location: 'Kenya',
     points: [
       'Coursework in programming, database systems, computer networks and operating systems.',
