@@ -45,8 +45,6 @@
   font-size: 0.9rem;
 }
 
-.routes li:first-child .route-icon { background: var(--accent); color: #fff; }
-
 .route-text {
   flex: 1;
   min-width: 0;

@@ -8,6 +8,12 @@
  * ───────────────────────────────────────────────────────────────────────
  */
 
+const phone = '+254 742 028 905';
+
+// wa.me opens a chat in the WhatsApp app (or WhatsApp Web on a computer)
+// with this message already typed, so the first line is always professional.
+const whatsappMessage = "Hi Isaac, I came across your portfolio and I'd like to talk.";
+
 export const profile = {
   // ── Identity ──────────────────────────────────────────────────────────
   name: 'Isaac Onyango Ouma',
@@ -25,7 +31,7 @@ export const profile = {
 
   // ── Contact ───────────────────────────────────────────────────────────
   email: 'isaaco62800@gmail.com',
-  phone: '+254 742 028 905',
+  phone,
   // Sits in /public. Leave '' to hide the download button.
   resumeFile: 'Isaac-Onyango-Ouma-CV.pdf',
 
@@ -34,6 +40,14 @@ export const profile = {
   socials: [
     { label: 'GitHub',   icon: 'fa-brands fa-github',    url: 'https://github.com/Isaac-Onyango-Dev' },
     { label: 'LinkedIn', icon: 'fa-brands fa-linkedin',  url: 'https://www.linkedin.com/in/isaac-onyango-334953374/' },
+    {
+      label: 'WhatsApp',
+      icon: 'fa-brands fa-whatsapp',
+      url: `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`,
+      display: phone,      // shown instead of the URL in the contact list
+      color: '#25D366',    // WhatsApp green on its contact-list icon
+      direct: true,        // listed with email, ahead of the profile links
+    },
     { label: 'X',        icon: 'fa-brands fa-x-twitter', url: 'https://x.com/isaaco62800' },
   ],
 

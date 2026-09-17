@@ -2,23 +2,31 @@ import './contact.css';
 import { profile } from '../data/profile.js';
 
 export function Contact() {
-  // One inset-grouped list of direct routes: email first, then profiles.
+  // One inset-grouped list: ways to talk directly first, then profiles.
+  const socials = [...profile.socials].sort((a, b) => Number(!!b.direct) - Number(!!a.direct));
   const routes = [
-    { label: 'Email', value: profile.email, icon: 'fa-solid fa-envelope', url: `mailto:${profile.email}` },
-    ...profile.socials.map(({ label, icon, url }) => ({
+    {
+      label: 'Email',
+      value: profile.email,
+      icon: 'fa-solid fa-envelope',
+      url: `mailto:${profile.email}`,
+      color: 'var(--accent)',
+    },
+    ...socials.map(({ label, icon, url, display, color }) => ({
       label,
       icon,
       url,
-      value: url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
+      color,
+      value: display || url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
     })),
   ];
 
   const routeRows = routes
     .map(
-      ({ label, value, icon, url }) => `
+      ({ label, value, icon, url, color }) => `
       <li>
         <a class="route" href="${url}"${url.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>
-          <span class="route-icon" aria-hidden="true"><i class="${icon}"></i></span>
+          <span class="route-icon"${color ? ` style="background: ${color}; color: #fff;"` : ''} aria-hidden="true"><i class="${icon}"></i></span>
           <span class="route-text">
             <span class="route-label">${label}</span>
             <span class="route-value">${value}</span>
