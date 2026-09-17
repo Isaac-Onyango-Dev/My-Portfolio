@@ -5,7 +5,7 @@
  * and responses are cached in sessionStorage so a visitor costs one request.
  */
 
-const CACHE_KEY = 'gh-repos-cache-v2';
+const CACHE_KEY = 'gh-repos-cache-v3';
 const CACHE_TTL = 1000 * 60 * 30; // 30 minutes
 
 /** Approximate brand colours for the languages likely to appear. */
@@ -55,14 +55,18 @@ function writeCache(data) {
 }
 
 /**
- * @param {string} username        GitHub handle
- * @param {string[]} blocklist     repo names to omit
- * @returns {Promise<Array>}       normalised repo objects, newest push first
+ * Every public repo, forks and archived included, so counts can match what
+ * GitHub shows on the profile. Use summarizeRepos() to get the display list.
+ *
+ * @param {string} username  GitHub handle
+ * @returns {Promise<Array>} normalised repo objects, newest push first
  */
-export async function fetchRepos(username, blocklist = []) {
+export async function fetchRepos(username) {
   const cached = readCache();
-  if (cached) return cached.filter((r) => !blocklist.includes(r.name));
+  if (cached) return cached;
 
+  // ponytail: one page of 100; counts and the grid are exact up to 100 public
+  // repos. Past that, follow the Link header or read public_repos from /users.
   const res = await fetch(
     `https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`,
     { headers: { Accept: 'application/vnd.github+json' } }
@@ -79,7 +83,7 @@ export async function fetchRepos(username, blocklist = []) {
   const raw = await res.json();
 
   const repos = raw
-    .filter((r) => !r.fork && !r.archived && !r.private)
+    .filter((r) => !r.private)
     .map((r) => ({
       name: r.name,
       title: prettify(r.name),
@@ -91,10 +95,26 @@ export async function fetchRepos(username, blocklist = []) {
       stars: r.stargazers_count,
       forks: r.forks_count,
       pushedAt: r.pushed_at,
+      fork: r.fork,
+      archived: r.archived,
     }));
 
   writeCache(repos);
-  return repos.filter((r) => !blocklist.includes(r.name));
+  return repos;
+}
+
+/**
+ * Splits the full repo list into what the page lists and what it counts.
+ *   visible      — own, active repos not in the blocklist (the grid)
+ *   publicCount  — every public repo, matching the number on GitHub
+ *   shippedCount — own repos with a live homepage URL
+ */
+export function summarizeRepos(all, blocklist = []) {
+  return {
+    visible: all.filter((r) => !r.fork && !r.archived && !blocklist.includes(r.name)),
+    publicCount: all.length,
+    shippedCount: all.filter((r) => !r.fork && safeUrl(r.homepage)).length,
+  };
 }
 
 /** my-cool-repo → My Cool Repo */

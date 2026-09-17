@@ -1,7 +1,7 @@
 // Run with `npm test`. Covers the rules that decide what the portfolio features.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pickFeatured, safeUrl } from './github.js';
+import { pickFeatured, safeUrl, summarizeRepos } from './github.js';
 
 const repo = (name, extra = {}) => ({
   name, description: `${name} desc`, url: `https://github.com/u/${name}`,
@@ -56,4 +56,19 @@ test('safeUrl only passes http(s)', () => {
   assert.equal(safeUrl('https://a.dev'), 'https://a.dev');
   assert.equal(safeUrl('javascript:alert(1)'), '');
   assert.equal(safeUrl(null), '');
+});
+
+test('counts every public repo, lists only own active ones', () => {
+  const all = [
+    repo('Site', { homepage: 'https://site.dev' }),   // blocklisted, still counted and shipped
+    repo('Profile'),                                   // blocklisted
+    repo('App', { homepage: 'https://app.dev' }),
+    repo('Old', { archived: true }),
+    repo('Theirs', { fork: true, homepage: 'https://fork.dev' }),
+    repo('Draft'),
+  ];
+  const { visible, publicCount, shippedCount } = summarizeRepos(all, ['Site', 'Profile']);
+  assert.equal(publicCount, 6);
+  assert.equal(shippedCount, 2); // Site + App; a fork's homepage isn't your shipment
+  assert.deepEqual(names(visible), ['App', 'Draft']);
 });

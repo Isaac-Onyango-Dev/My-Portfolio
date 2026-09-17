@@ -39,7 +39,7 @@ export const profile = {
   github: 'Isaac-Onyango-Dev',
   socials: [
     { label: 'GitHub',   icon: 'fa-brands fa-github',    url: 'https://github.com/Isaac-Onyango-Dev' },
-    { label: 'LinkedIn', icon: 'fa-brands fa-linkedin',  url: 'https://www.linkedin.com/in/isaac-onyango-334953374/' },
+    { label: 'LinkedIn', icon: 'fa-brands fa-linkedin',  url: 'https://www.linkedin.com/in/isaac-onyango-dev/' },
     {
       label: 'WhatsApp',
       icon: 'fa-brands fa-whatsapp',

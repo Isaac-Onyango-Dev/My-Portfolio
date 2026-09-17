@@ -39,8 +39,10 @@ Things worth keeping current:
   in `projectNotes`.
 - **Live from GitHub** is every other public repo, fetched in the visitor's
   browser. Forks, archived repos and `repoBlocklist` are skipped.
-- **Headline numbers** for shipped projects and repositories are counted live.
-  A repo counts as shipped when it has a homepage URL.
+- **Headline numbers** for repositories and shipped projects are counted live.
+  The repository count is every public repo, the same number GitHub shows, even
+  ones hidden from the grid by `repoBlocklist`. A repo counts as shipped when it
+  is yours (not a fork) and has a homepage URL.
 
 Pins are only available from GitHub's GraphQL API, which needs a token, so
 `scripts/sync-github.mjs` fetches them at build time into `public/github.json`.

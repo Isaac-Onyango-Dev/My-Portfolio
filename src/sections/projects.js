@@ -2,6 +2,7 @@ import './projects.css';
 import { profile, projectNotes, extraProjects, repoBlocklist } from '../data/profile.js';
 import {
   fetchRepos,
+  summarizeRepos,
   fetchPinnedSnapshot,
   pickFeatured,
   safeUrl,
@@ -273,13 +274,14 @@ export async function initProjects() {
   });
 
   const [liveResult, pinned] = await Promise.all([
-    fetchRepos(profile.github, repoBlocklist).then(
+    fetchRepos(profile.github).then(
       (list) => ({ list }),
       (error) => ({ error })
     ),
     fetchPinnedSnapshot(import.meta.env.BASE_URL),
   ]);
-  const live = liveResult.list || null;
+  const summary = liveResult.list ? summarizeRepos(liveResult.list, repoBlocklist) : null;
+  const live = summary?.visible || null;
 
   const featured = pickFeatured({ pinned, live, notes: projectNotes, blocklist: repoBlocklist });
   featuredGrid.innerHTML = [...featured, ...extraProjects].map(featuredCard).join('');
@@ -294,8 +296,8 @@ export async function initProjects() {
   try {
     if (liveResult.error) throw liveResult.error;
 
-    setStat('repos', live.length);
-    setStat('shipped', live.filter((r) => safeUrl(r.homepage)).length);
+    setStat('repos', summary.publicCount);
+    setStat('shipped', summary.shippedCount);
 
     // Featured repos already have a card above; don't show them twice.
     const featuredNames = new Set(featured.map((f) => f.name));
