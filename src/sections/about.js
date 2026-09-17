@@ -10,7 +10,7 @@ export function About() {
     .map(
       ({ icon, label, value }) => `
       <li class="fact">
-        <i class="${icon}" aria-hidden="true"></i>
+        <span class="fact-icon" aria-hidden="true"><i class="${icon}"></i></span>
         <div>
           <span class="fact-label">${label}</span>
           <span class="fact-value">${value}</span>
@@ -24,16 +24,16 @@ export function About() {
       ({ group, items }) => `
       <div class="skill-group" data-reveal-child>
         <h3 class="skill-group-title">${group}</h3>
-        <div class="about-skills">
+        <ul class="about-skills">
           ${items
             .map(
               ({ name, icon, color }) => `
-            <div class="skill-chip">
+            <li class="skill-chip">
               <i class="${icon}" style="color: ${color};" aria-hidden="true"></i>${name}
-            </div>`
+            </li>`
             )
             .join('')}
-        </div>
+        </ul>
       </div>`
     )
     .join('');
@@ -41,18 +41,18 @@ export function About() {
   return `
     <section id="about" class="about-section">
       <div class="section-container" data-reveal>
-        <div class="section-label">About Me</div>
-        <h2 class="section-title">Who I Am</h2>
+        <header class="section-head">
+          <p class="section-label">About</p>
+          <h2 class="section-title">Software that solves real problems.</h2>
+        </header>
 
         <div class="about-grid">
           <div class="about-text">${paragraphs}</div>
-          <aside class="about-facts" aria-label="Quick facts">
-            <ul>${facts}</ul>
-          </aside>
+          <ul class="about-facts" aria-label="Quick facts">${facts}</ul>
         </div>
       </div>
 
-      <div class="section-container" data-reveal>
+      <div class="section-container about-skills-block" data-reveal>
         <h3 class="subsection-title">What I work with</h3>
         <div class="about-skill-groups">${groups}</div>
       </div>

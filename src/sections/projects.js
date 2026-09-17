@@ -18,11 +18,11 @@ const STATUS_LABEL = {
   archived: 'Archived',
 };
 
-/** Deterministic gradient so a project without a screenshot still looks intentional. */
-function gradientFor(title) {
+/** Stable hue per project, so a card without a screenshot still has its own identity. */
+function hueFor(title) {
   let hash = 0;
   for (let i = 0; i < title.length; i++) hash = (hash * 31 + title.charCodeAt(i)) % 360;
-  return `linear-gradient(135deg, hsl(${hash} 65% 22%), hsl(${(hash + 55) % 360} 60% 34%))`;
+  return hash;
 }
 
 function escapeHtml(str = '') {
@@ -47,8 +47,8 @@ function featuredCard(project) {
 
   const media = img
     ? `<img src="${img}" alt="${escapeHtml(title)} screenshot" loading="lazy" decoding="async" />`
-    : `<div class="card-media-fallback" style="background: ${gradientFor(title)};">
-         <span>${escapeHtml(title.slice(0, 1))}</span>
+    : `<div class="card-media-fallback" style="--hue: ${hueFor(title)};">
+         <span class="app-icon" aria-hidden="true">${escapeHtml(title.slice(0, 1))}</span>
        </div>`;
 
   const links = [
@@ -162,12 +162,14 @@ export function Projects() {
   return `
     <section id="projects" class="projects-section">
       <div class="section-container" data-reveal>
-        <div class="section-label">My Work</div>
-        <h2 class="section-title">Projects</h2>
-        <p class="section-intro">
-          The projects I've pinned on GitHub, followed by everything else I'm
-          pushing there — all pulled straight from GitHub, so this is never out of date.
-        </p>
+        <header class="section-head">
+          <p class="section-label">Work</p>
+          <h2 class="section-title">Things I've built.</h2>
+          <p class="section-intro">
+            Featured projects first, then everything else I'm shipping — pulled
+            straight from GitHub, so this page is never out of date.
+          </p>
+        </header>
       </div>
 
       <div class="section-container">
@@ -187,14 +189,14 @@ export function Projects() {
 
         <div class="repo-filters" id="repo-filters" hidden></div>
 
-        <div class="projects-grid" id="repo-grid">
+        <div class="projects-grid repo-shelf" id="repo-grid">
           ${skeletons()}
         </div>
 
         <div class="repo-message" id="repo-message" hidden></div>
 
         <div class="view-all-container">
-          <button class="view-all-btn" id="repo-more" hidden>Show all repositories</button>
+          <button class="btn btn-tinted" id="repo-more" hidden>Show all repositories</button>
         </div>
       </div>
     </section>

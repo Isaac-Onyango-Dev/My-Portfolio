@@ -2,9 +2,9 @@
   <defs>
     <!-- Indigo tile so the mark reads as a solid shape in a crowded tab strip -->
     <linearGradient id="tile" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#818cf8" />
-      <stop offset="55%" stop-color="#6366f1" />
-      <stop offset="100%" stop-color="#4338ca" />
+      <stop offset="0%" stop-color="#8c8aff" />
+      <stop offset="55%" stop-color="#5e5ce6" />
+      <stop offset="100%" stop-color="#3634a3" />
     </linearGradient>
   </defs>
 

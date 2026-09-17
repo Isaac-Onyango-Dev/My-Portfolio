@@ -18,8 +18,10 @@ export function Manifestoes() {
   return `
     <section id="manifestoes" class="manifestoes-section">
       <div class="section-container" data-reveal>
-        <div class="section-label">What I Believe</div>
-        <h2 class="section-title">My Manifesto</h2>
+        <header class="section-head">
+          <p class="section-label">Principles</p>
+          <h2 class="section-title">How I work.</h2>
+        </header>
         <div class="manifesto-list">
           ${items}
         </div>

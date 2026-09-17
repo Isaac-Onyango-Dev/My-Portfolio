@@ -47,8 +47,10 @@ export function Experience() {
   return `
     <section id="experience" class="experience-section">
       <div class="section-container" data-reveal>
-        <div class="section-label">The Road So Far</div>
-        <h2 class="section-title">Experience &amp; Education</h2>
+        <header class="section-head">
+          <p class="section-label">Experience</p>
+          <h2 class="section-title">The road so far.</h2>
+        </header>
       </div>
       <div class="section-container">
         <ol class="timeline">

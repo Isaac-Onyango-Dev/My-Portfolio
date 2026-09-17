@@ -5,15 +5,12 @@ const base = import.meta.env.BASE_URL;
 
 export function Hero() {
   const badge = profile.openToWork
-    ? `<div class="hero-badge">
-         <span class="hero-badge-dot" aria-hidden="true"></span>
-         ${profile.availability}
-       </div>`
+    ? `<p class="hero-badge"><span class="hero-badge-dot" aria-hidden="true"></span>${profile.availability}</p>`
     : '';
 
   const resumeBtn = profile.resumeFile
-    ? `<a href="${base}${profile.resumeFile}" download class="btn-secondary">
-         <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i> Download CV
+    ? `<a href="${base}${profile.resumeFile}" download class="btn btn-tinted">
+         <i class="fa-solid fa-arrow-down" aria-hidden="true"></i> Download CV
        </a>`
     : '';
 
@@ -26,14 +23,14 @@ export function Hero() {
     )
     .join('');
 
-  // The rotating ring reuses the skill data — no duplicated icon list.
+  // The orbit reuses the skill data — no duplicated icon list.
   const ringItems = skillGroups.flatMap((g) => g.items);
   const ring = ringItems
     .map(
       ({ name, icon, color }, i) => `
-      <div class="tech-icon" style="--i: ${i}; color: ${color};" title="${name}">
+      <span class="tech-icon" style="--i: ${i}; color: ${color};" title="${name}">
         <i class="${icon}"></i>
-      </div>`
+      </span>`
     )
     .join('');
 
@@ -41,7 +38,7 @@ export function Hero() {
     .map(
       ({ value, label, source }) => `
       <div class="stat">
-        <span class="stat-value"${source ? ` data-stat-source="${source}"` : ''}>${value ?? '—'}</span>
+        <span class="stat-value"${source ? ` data-stat-source="${source}"` : ''}>${value ?? '–'}</span>
         <span class="stat-label">${label}</span>
       </div>`
     )
@@ -50,47 +47,38 @@ export function Hero() {
   return `
     <section id="hero" class="hero-section">
       <div class="hero-inner">
-        <div class="hero-content">
-          ${badge}
-          <p class="hero-greeting">Hello, I'm</p>
-          <h1 class="hero-name">
-            <span id="typed-name"></span><span class="typing-cursor" id="hero-cursor">|</span>
-          </h1>
-          <p class="hero-role" aria-live="polite">
-            <span id="typed-role"></span><span class="role-cursor" aria-hidden="true">|</span>
-          </p>
-          <p class="hero-description">${profile.tagline}</p>
-          <p class="hero-meta">
-            <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${profile.location}</span>
-            <a href="mailto:${profile.email}"><i class="fa-solid fa-envelope" aria-hidden="true"></i> ${profile.email}</a>
-          </p>
-          <div class="hero-cta">
-            <a href="#projects" class="btn-primary">View My Work</a>
-            ${resumeBtn}
-            <a href="#contact" class="btn-secondary">Get In Touch</a>
-          </div>
-          <div class="hero-socials">${socials}</div>
-        </div>
-
-        <div class="hero-visual">
-          <div class="tech-ring" aria-hidden="true" style="--total: ${ringItems.length};">
-            ${ring}
-          </div>
+        <div class="hero-visual" style="--total: ${ringItems.length};">
+          <div class="tech-ring" aria-hidden="true">${ring}</div>
           <img
             class="hero-portrait"
             src="${base}isaac-profile.png"
             alt="Portrait of ${profile.name}"
-            width="320" height="400" fetchpriority="high" decoding="async"
+            width="400" height="500" fetchpriority="high" decoding="async"
           />
+        </div>
+
+        <div class="hero-content">
+          ${badge}
+          <h1 class="hero-name">${profile.name}</h1>
+          <p class="hero-role">
+            <span class="sr-only">${profile.roles.join(', ')}</span>
+            <span class="role-word" id="role-word" aria-hidden="true">${profile.roles[0]}</span>
+          </p>
+          <p class="hero-description">${profile.tagline}</p>
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-filled">View my work</a>
+            ${resumeBtn}
+          </div>
+          <div class="hero-foot">
+            <div class="hero-socials">${socials}</div>
+            <p class="hero-meta">
+              <i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${profile.location}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div class="hero-stats" data-reveal>${statCells}</div>
-
-      <a href="#about" class="hero-scroll-indicator" aria-label="Scroll to about section">
-        <span>Scroll</span>
-        <div class="scroll-line"></div>
-      </a>
+      <div class="hero-stats section-container" data-reveal>${statCells}</div>
     </section>
   `;
 }

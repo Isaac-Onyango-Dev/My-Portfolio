@@ -105,14 +105,17 @@ src/data/profile.js     ← all your personal content
 src/sections/           one .js + .css pair per section
 src/utils/github.js     GitHub API client, caching, featured-project rules
 scripts/sync-github.mjs build-time snapshot of pinned repos
-src/utils/motion.js     scroll reveal, progress bar, active nav link
-src/utils/typewriter.js hero typing and rotating role animations
+src/utils/motion.js     scroll reveal, progress bar, active nav link, role rotator
 public/                 logo, portrait, CV, robots.txt, sitemap.xml
 ```
 
 ## Accessibility and performance notes
 
-- Every animation is disabled when the visitor's system asks for reduced motion.
+- Mobile first: phones get a bottom tab bar, 44px+ touch targets, and 17px form
+  text so iOS doesn't zoom on focus. Tablet and desktop layer on from there.
+- Every animation is disabled when the visitor's system asks for reduced motion,
+  translucent bars turn solid for reduced transparency, and separators and
+  secondary text strengthen for increased contrast.
 - A skip link and visible focus rings support keyboard navigation.
 - Form fields validate inline with messages tied to their inputs.
 - Images are lazy-loaded and sized to avoid layout shift.

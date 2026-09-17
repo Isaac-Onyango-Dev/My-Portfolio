@@ -18,7 +18,10 @@ export function initReveal() {
   const targets = document.querySelectorAll('[data-reveal]');
 
   if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-    targets.forEach((el) => el.classList.add('is-revealed'));
+    // Children too — otherwise staggered items stay invisible.
+    document
+      .querySelectorAll('[data-reveal], [data-reveal-child]')
+      .forEach((el) => el.classList.add('is-revealed'));
     return;
   }
 
@@ -133,4 +136,26 @@ export function initNavScrollState() {
   const update = () => nav.classList.toggle('is-scrolled', window.scrollY > 24);
   window.addEventListener('scroll', update, { passive: true });
   update();
+}
+
+/**
+ * Cycles an element's text through `phrases`: the current one lifts out,
+ * the next rises in from below (same axis, so the motion reads as one path).
+ * Reduced motion keeps the first phrase and never cycles.
+ */
+export function rotateText(el, phrases, interval = 2800) {
+  if (!el || phrases.length < 2 || prefersReducedMotion) return;
+
+  let i = 0;
+  setInterval(() => {
+    el.classList.add('is-leaving');
+    setTimeout(() => {
+      i = (i + 1) % phrases.length;
+      el.textContent = phrases[i];
+      // Jump below without animating, then let the transition bring it home.
+      el.classList.replace('is-leaving', 'is-entering');
+      void el.offsetWidth;
+      el.classList.remove('is-entering');
+    }, 260);
+  }, interval);
 }

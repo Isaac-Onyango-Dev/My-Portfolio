@@ -2,73 +2,78 @@ import './contact.css';
 import { profile } from '../data/profile.js';
 
 export function Contact() {
-  const socials = profile.socials
+  // One inset-grouped list of direct routes: email first, then profiles.
+  const routes = [
+    { label: 'Email', value: profile.email, icon: 'fa-solid fa-envelope', url: `mailto:${profile.email}` },
+    ...profile.socials.map(({ label, icon, url }) => ({
+      label,
+      icon,
+      url,
+      value: url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
+    })),
+  ];
+
+  const routeRows = routes
     .map(
-      ({ label, icon, url }) => `
-      <a href="${url}" target="_blank" rel="noopener" class="social-link" aria-label="${label}">
-        <i class="${icon}" aria-hidden="true"></i>
-        <span>${label}</span>
-      </a>`
+      ({ label, value, icon, url }) => `
+      <li>
+        <a class="route" href="${url}"${url.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>
+          <span class="route-icon" aria-hidden="true"><i class="${icon}"></i></span>
+          <span class="route-text">
+            <span class="route-label">${label}</span>
+            <span class="route-value">${value}</span>
+          </span>
+          <i class="fa-solid fa-chevron-right route-chevron" aria-hidden="true"></i>
+        </a>
+      </li>`
     )
     .join('');
 
+  const field = (id, label, control) => `
+    <div class="field">
+      <label for="${id}">${label}</label>
+      ${control}
+      <span class="field-error" id="${id}-error" data-error-for="${id}"></span>
+    </div>`;
+
   return `
     <section id="contact" class="contact-section">
-      <div class="section-container" data-reveal>
-        <div class="section-label">Say Hello</div>
-        <h2 class="section-title">Get In Touch</h2>
-        <p class="contact-intro">
-          Hiring, collaborating, or just curious about something I've built?
-          Send a message and I'll reply within a day.
-        </p>
-
-        <a href="mailto:${profile.email}" class="contact-email-link">
-          <i class="fa-solid fa-envelope" aria-hidden="true"></i> ${profile.email}
-        </a>
+      <div class="section-container contact-layout" data-reveal>
+        <div class="contact-aside">
+          <header class="section-head">
+            <p class="section-label">Contact</p>
+            <h2 class="section-title">Let's build something.</h2>
+            <p class="section-intro">
+              Hiring, collaborating, or curious about something I've built?
+              I reply within a day.
+            </p>
+          </header>
+          <ul class="routes" aria-label="Ways to reach me">${routeRows}</ul>
+        </div>
 
         <form class="contact-form" id="contact-form" novalidate>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="contact-name">Name</label>
-              <input type="text" id="contact-name" name="name" placeholder="Your name"
-                     autocomplete="name" required minlength="2" />
-              <span class="field-error" data-error-for="contact-name"></span>
-            </div>
-            <div class="form-group">
-              <label for="contact-email">Email</label>
-              <input type="email" id="contact-email" name="email" placeholder="your@email.com"
-                     autocomplete="email" required />
-              <span class="field-error" data-error-for="contact-email"></span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="contact-subject">Subject</label>
-            <input type="text" id="contact-subject" name="subject" placeholder="What's this about?" />
-          </div>
-
-          <div class="form-group">
-            <label for="contact-message">Message</label>
-            <textarea id="contact-message" name="message" rows="5"
-                      placeholder="Your message..." required minlength="10"></textarea>
-            <div class="textarea-foot">
-              <span class="field-error" data-error-for="contact-message"></span>
-              <span class="char-count" id="char-count">0 characters</span>
-            </div>
+          <div class="field-group">
+            ${field('contact-name', 'Name', `<input type="text" id="contact-name" name="name" placeholder="Your name"
+                     autocomplete="name" required minlength="2" aria-describedby="contact-name-error" />`)}
+            ${field('contact-email', 'Email', `<input type="email" id="contact-email" name="email" placeholder="you@company.com"
+                     autocomplete="email" inputmode="email" required aria-describedby="contact-email-error" />`)}
+            ${field('contact-subject', 'Subject', `<input type="text" id="contact-subject" name="subject" placeholder="What's this about?" />`)}
+            ${field('contact-message', 'Message', `<textarea id="contact-message" name="message" rows="5"
+                     placeholder="Tell me a little about it" required minlength="10"
+                     aria-describedby="contact-message-error char-count"></textarea>
+              <span class="char-count" id="char-count">0 characters</span>`)}
           </div>
 
           <!-- Honeypot: bots fill hidden fields, humans never see this one. -->
           <input type="text" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-          <button type="submit" class="btn-submit" id="contact-submit">
-            <span class="btn-label">Send Message</span>
+          <button type="submit" class="btn btn-filled btn-submit" id="contact-submit">
+            <span class="btn-label">Send message</span>
             <span class="btn-spinner" aria-hidden="true"></span>
           </button>
 
           <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
         </form>
-
-        <div class="contact-socials">${socials}</div>
       </div>
     </section>
   `;
@@ -94,6 +99,7 @@ function validateField(input) {
   const slot = document.querySelector(`[data-error-for="${input.id}"]`);
 
   input.classList.toggle('is-invalid', Boolean(error));
+  input.setAttribute('aria-invalid', String(Boolean(error)));
   if (slot) slot.textContent = error;
   return !error;
 }
