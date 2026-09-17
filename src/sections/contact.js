@@ -46,42 +46,45 @@ export function Contact() {
 
   return `
     <section id="contact" class="contact-section">
-      <div class="section-container contact-layout" data-reveal>
-        <div class="contact-aside">
-          <header class="section-head">
-            <p class="section-label">Contact</p>
-            <h2 class="section-title">Let's build something.</h2>
-            <p class="section-intro">
-              Hiring, collaborating, or curious about something I've built?
-              I reply within a day.
-            </p>
-          </header>
+      <div class="section-container" data-reveal>
+        <header class="section-head">
+          <p class="section-label">Contact</p>
+          <h2 class="section-title">Let's build something.</h2>
+          <p class="section-intro">
+            Hiring, collaborating, or curious about something I've built?
+            I reply within a day.
+          </p>
+        </header>
+
+        <!-- Heading spans the section, so both cards below start on the same line. -->
+        <div class="contact-layout">
           <ul class="routes" aria-label="Ways to reach me">${routeRows}</ul>
+
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="field-group">
+              ${field('contact-name', 'Name', `<input type="text" id="contact-name" name="name" placeholder="Your name"
+                       autocomplete="name" required minlength="2" aria-describedby="contact-name-error" />`)}
+              ${field('contact-email', 'Email', `<input type="email" id="contact-email" name="email" placeholder="you@company.com"
+                       autocomplete="email" inputmode="email" required aria-describedby="contact-email-error" />`)}
+              ${field('contact-subject', 'Subject', `<input type="text" id="contact-subject" name="subject" placeholder="What's this about?" />`)}
+              ${field('contact-message', 'Message', `<textarea id="contact-message" name="message" rows="5"
+                       placeholder="Tell me a little about it" required minlength="10"
+                       aria-describedby="contact-message-error char-count"></textarea>
+                <span class="char-count" id="char-count">0 characters</span>`)}
+            </div>
+
+            <!-- Honeypot: bots fill hidden fields, humans never see this one. -->
+            <input type="text" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+            <div class="form-footer">
+              <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+              <button type="submit" class="btn btn-filled btn-submit" id="contact-submit">
+                <span class="btn-label">Send message</span>
+                <span class="btn-spinner" aria-hidden="true"></span>
+              </button>
+            </div>
+          </form>
         </div>
-
-        <form class="contact-form" id="contact-form" novalidate>
-          <div class="field-group">
-            ${field('contact-name', 'Name', `<input type="text" id="contact-name" name="name" placeholder="Your name"
-                     autocomplete="name" required minlength="2" aria-describedby="contact-name-error" />`)}
-            ${field('contact-email', 'Email', `<input type="email" id="contact-email" name="email" placeholder="you@company.com"
-                     autocomplete="email" inputmode="email" required aria-describedby="contact-email-error" />`)}
-            ${field('contact-subject', 'Subject', `<input type="text" id="contact-subject" name="subject" placeholder="What's this about?" />`)}
-            ${field('contact-message', 'Message', `<textarea id="contact-message" name="message" rows="5"
-                     placeholder="Tell me a little about it" required minlength="10"
-                     aria-describedby="contact-message-error char-count"></textarea>
-              <span class="char-count" id="char-count">0 characters</span>`)}
-          </div>
-
-          <!-- Honeypot: bots fill hidden fields, humans never see this one. -->
-          <input type="text" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
-
-          <button type="submit" class="btn btn-filled btn-submit" id="contact-submit">
-            <span class="btn-label">Send message</span>
-            <span class="btn-spinner" aria-hidden="true"></span>
-          </button>
-
-          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-        </form>
       </div>
     </section>
   `;
